@@ -337,11 +337,14 @@ export const HomeSearchBar = forwardRef<
           ? t("brave")
           : t("google");
 
-  const showSuggestions =
-    (isFocused || query.trim().length > 0) &&
-    (allItems.length > 0 || (isLaunchpad && !!query.trim()));
+  const hasQuery = !!query.trim();
 
-  const isExpanded = isLaunchpad && (isFocused || showSuggestions);
+  const showSuggestions = isLaunchpad
+    ? hasQuery
+    : (isFocused || hasQuery) && allItems.length > 0;
+
+  const isExpanded = isLaunchpad ? hasQuery : isFocused || showSuggestions;
+
   const placeholder = isLaunchpad
     ? `Search with ${providerLabel} or enter address`
     : `${t("search")} ${providerLabel} or enter a URL...`;
@@ -355,10 +358,11 @@ export const HomeSearchBar = forwardRef<
             ? isExpanded
               ? "rounded-2xl border border-sky-400/35 bg-[#1c1c1e]/88 shadow-2xl shadow-black/30 backdrop-blur-xl"
               : "rounded-full border border-white/20 bg-white shadow-xl shadow-black/15"
-            : "rounded-2xl border border-white/20 bg-background/55 shadow-2xl shadow-black/10 backdrop-blur-xl",
-          !isLaunchpad &&
-            isFocused &&
-            "border-white/30 bg-background/65 shadow-black/20",
+            : cn(
+                "rounded-2xl border border-white/20 bg-background/55 shadow-2xl shadow-black/10 backdrop-blur-xl",
+                isFocused &&
+                  "border-white/30 bg-background/65 shadow-black/20",
+              ),
         )}
       >
         <div className="relative flex items-center">
