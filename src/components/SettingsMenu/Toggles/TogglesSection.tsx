@@ -21,13 +21,11 @@ export const TogglesSection = ({
     showRightSidebar,
     autoFocusSearch,
     enableLeftSidebarHover,
-    enableSearchHoverZone,
     isDynamicWallpaper,
     toggleAutoOrderTabs,
     toggleShowRightSidebar,
     toggleAutoFocusSearch,
     toggleLeftSidebarHover,
-    toggleSearchHoverZone,
     setDynamicWallpaper,
   } = useSettingsStore();
 
@@ -60,12 +58,6 @@ export const TogglesSection = ({
       label: t("enableLeftSidebarHover"),
       checked: enableLeftSidebarHover,
       onChange: toggleLeftSidebarHover,
-    },
-    {
-      id: "enableSearchHoverZone",
-      label: t("enableSearchHoverZone"),
-      checked: enableSearchHoverZone,
-      onChange: toggleSearchHoverZone,
     },
     {
       id: "dynamicWallpaper",

@@ -12,12 +12,10 @@ export function BehaviorSection() {
     showRightSidebar,
     autoFocusSearch,
     enableLeftSidebarHover,
-    enableSearchHoverZone,
     toggleAutoOrderTabs,
     toggleShowRightSidebar,
     toggleAutoFocusSearch,
     toggleLeftSidebarHover,
-    toggleSearchHoverZone,
   } = useSettingsStore();
   const t = useTranslation(language);
 
@@ -37,11 +35,6 @@ export function BehaviorSection() {
               label={t("enableLeftSidebarHover")}
               checked={enableLeftSidebarHover}
               onChange={toggleLeftSidebarHover}
-            />
-            <ToggleRow
-              label={t("enableSearchHoverZone")}
-              checked={enableSearchHoverZone}
-              onChange={toggleSearchHoverZone}
             />
           </div>
         </div>

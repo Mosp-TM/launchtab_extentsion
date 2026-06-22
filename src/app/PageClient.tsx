@@ -3,7 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import TabsZone from "@/components/Home/TabsZone";
 import SettingsMenu from "@/components/SettingsMenu";
-import SearchModal from "@/components/SearchModal";
+import {
+  HomeSearchBar,
+  type HomeSearchBarHandle,
+} from "@/components/Home/HomeSearchBar";
 import AISidebar from "@/components/AISidebar";
 import StickyAlarmDialog from "@/components/Notepad/StickyAlarmDialog";
 import GithubLink from "@/components/Home/GithubLink";
@@ -19,21 +22,13 @@ import { useTheme } from "next-themes";
 import { BackgroundLayer } from "./_components/BackgroundLayer";
 import { ClockSection } from "./_components/ClockSection";
 import { SidebarOverlay } from "./_components/SidebarOverlay";
-import { SearchHoverZone } from "./_components/SearchHoverZone";
-
-type SearchOpenRequest = {
-  id: number;
-  seedText: string;
-};
 
 export function PageClient() {
   const {
     showClock,
     showRightSidebar,
-    enableSearchHoverZone,
     backgroundImage,
     isHydrated,
-    clockPosition,
     layoutPreset,
     isDynamicWallpaper,
     dynamicWallpapers,
@@ -46,6 +41,17 @@ export function PageClient() {
 
   const { url: backgroundImageUrl } = useMediaUrl(backgroundImage);
   const [bgOpacity, setBgOpacity] = useState(0);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [isAISidebarOpen, setIsAISidebarOpen] = useState(false);
+
+  const searchRef = useRef<HomeSearchBarHandle>(null);
+  const isAISidebarOpenRef = useRef(false);
+  const hasPickedDynamicWallpaperRef = useRef(false);
+  const lastDynamicWallpaperThemeRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    isAISidebarOpenRef.current = isAISidebarOpen;
+  }, [isAISidebarOpen]);
 
   useEffect(() => {
     if (backgroundImageUrl) {
@@ -54,48 +60,6 @@ export function PageClient() {
       return () => clearTimeout(timer);
     }
   }, [backgroundImageUrl]);
-
-  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-  const [searchOpenRequest, setSearchOpenRequest] = useState<SearchOpenRequest>(
-    { id: 0, seedText: "" },
-  );
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-  const [isAISidebarOpen, setIsAISidebarOpen] = useState(false);
-
-  const hasPickedDynamicWallpaperRef = useRef(false);
-  const lastDynamicWallpaperThemeRef = useRef<string | null>(null);
-  const isSearchModalOpenRef = useRef(false);
-  const isAISidebarOpenRef = useRef(false);
-  const isSearchInputReadyRef = useRef(false);
-
-  useEffect(() => {
-    isSearchModalOpenRef.current = isSearchModalOpen;
-  }, [isSearchModalOpen]);
-  useEffect(() => {
-    isAISidebarOpenRef.current = isAISidebarOpen;
-  }, [isAISidebarOpen]);
-
-  useEffect(() => {
-    const handleOpenSearch = (e: Event) => {
-      const customEvent = e as CustomEvent<{ seedText?: string }>;
-      const seedText = customEvent.detail?.seedText || "";
-      setSearchOpenRequest((r) => ({ id: r.id + 1, seedText }));
-      setIsSearchModalOpen(true);
-      isSearchModalOpenRef.current = true;
-    };
-    window.addEventListener("open-search-modal", handleOpenSearch);
-    return () =>
-      window.removeEventListener("open-search-modal", handleOpenSearch);
-  }, []);
-
-  const handleSearchModalOpenChange = (nextOpen: boolean) => {
-    isSearchModalOpenRef.current = nextOpen;
-    isSearchInputReadyRef.current = false;
-    setIsSearchModalOpen(nextOpen);
-    if (!nextOpen) {
-      setSearchOpenRequest((r) => ({ id: r.id, seedText: "" }));
-    }
-  };
 
   useEffect(() => {
     if (!isHydrated || !isDynamicWallpaper) {
@@ -179,38 +143,22 @@ export function PageClient() {
   const shouldShowRightSidebar = showRightSidebar && layoutPreset !== "focus";
 
   useKeyboardShortcuts({
+    onSearchFocus: (initialQuery) => {
+      if (isAISidebarOpenRef.current) return;
+      searchRef.current?.focus(initialQuery ?? "");
+    },
     onAIModalOpen: () => {
-      if (isSearchModalOpenRef.current) return;
       isAISidebarOpenRef.current = true;
       setIsAISidebarOpen(true);
-    },
-    onSearchModalOpen: (initialQuery) => {
-      if (isAISidebarOpenRef.current) return;
-      if (initialQuery) {
-        setSearchOpenRequest((r) => ({
-          id: r.id + 1,
-          seedText:
-            isSearchModalOpenRef.current && !isSearchInputReadyRef.current
-              ? `${r.seedText}${initialQuery}`
-              : initialQuery,
-        }));
-      } else if (!isSearchModalOpenRef.current) {
-        setSearchOpenRequest((r) => ({ id: r.id + 1, seedText: "" }));
-      }
-      isSearchModalOpenRef.current = true;
-      isSearchInputReadyRef.current = false;
-      setIsSearchModalOpen(true);
     },
   });
 
   useDefaultAssets();
   useStickyNoteAlarms();
 
-  const hasAutoOpenedRef = useRef(false);
   useEffect(() => {
-    if (isHydrated && !hasAutoOpenedRef.current && autoFocusSearch) {
-      setIsSearchModalOpen(true);
-      hasAutoOpenedRef.current = true;
+    if (isHydrated && autoFocusSearch) {
+      searchRef.current?.focus();
     }
   }, [isHydrated, autoFocusSearch]);
 
@@ -218,16 +166,20 @@ export function PageClient() {
     <div className="min-h-screen w-full relative overflow-hidden">
       <BackgroundLayer url={backgroundImageUrl} opacity={bgOpacity} />
 
-      <div className="relative z-10 flex flex-col h-screen overflow-hidden">
-        <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="relative z-10 flex min-h-screen flex-col">
+        <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col items-center px-4 pb-24 pt-[8vh] md:pt-[10vh]">
           {showClock && (
-            <ClockSection
-              clockPosition={clockPosition}
-              layoutPreset={layoutPreset}
-            />
+            <div className="mb-6 w-full">
+              <ClockSection layoutPreset={layoutPreset} />
+            </div>
           )}
-          <TabsZone />
-        </div>
+
+          <HomeSearchBar ref={searchRef} className="mb-8 w-full max-w-2xl" />
+
+          <div className="flex w-full flex-1 flex-col">
+            <TabsZone />
+          </div>
+        </main>
       </div>
 
       {shouldShowRightSidebar && (
@@ -238,30 +190,9 @@ export function PageClient() {
         />
       )}
 
-      {enableSearchHoverZone && (
-        <SearchHoverZone
-          onEnter={() => {
-            if (isSearchModalOpenRef.current || isAISidebarOpenRef.current)
-              return;
-            setSearchOpenRequest((r) => ({ id: r.id + 1, seedText: "" }));
-            isSearchModalOpenRef.current = true;
-            isSearchInputReadyRef.current = false;
-            setIsSearchModalOpen(true);
-          }}
-        />
-      )}
-
       <SettingsMenu />
       <GithubLink />
 
-      <SearchModal
-        open={isSearchModalOpen}
-        onOpenChange={handleSearchModalOpenChange}
-        openRequest={searchOpenRequest}
-        onInputReady={() => {
-          isSearchInputReadyRef.current = true;
-        }}
-      />
       <AISidebar
         open={isAISidebarOpen}
         onClose={() => {

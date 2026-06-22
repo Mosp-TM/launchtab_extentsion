@@ -8,7 +8,6 @@ import {
   Clock,
   ImageIcon,
   Maximize2,
-  Search,
 } from "lucide-react";
 import { faviconUrl } from "@/lib/favicon";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
@@ -341,22 +340,9 @@ export const TabsList = () => {
 
   if (tabs.length === 0) {
     return (
-      <div className="h-full flex flex-col p-6 overflow-y-auto ">
+      <div className="flex h-full flex-col overflow-y-auto px-2 pb-4 md:px-4">
         <div className="flex justify-end mb-6">
           <AddTabDialog />
-        </div>
-
-        {/* Mobile Only Search Box */}
-        <div
-          onClick={() => {
-            window.dispatchEvent(new CustomEvent("open-search-modal"));
-          }}
-          className="mobile-search-box md:hidden w-full max-w-sm mx-auto mb-6 flex items-center gap-2.5 h-11 px-4 rounded-full border border-border/40 bg-background/25 backdrop-blur-lg hover:bg-background/40 active:scale-98 transition-all cursor-pointer shadow-lg shadow-black/5"
-        >
-          <Search className="h-4.5 w-4.5 text-muted-foreground/80" />
-          <span className="text-sm text-muted-foreground/60 select-none">
-            {t("search")}
-          </span>
         </div>
 
         <div className="flex-1 flex items-center justify-center">
@@ -375,22 +361,9 @@ export const TabsList = () => {
     : tabs;
 
   return (
-    <div className="h-full flex flex-col p-6">
-      <div className="flex justify-end mb-6">
+    <div className="flex h-full flex-col px-2 pb-4 md:px-4">
+      <div className="flex justify-end mb-4">
         <AddTabDialog />
-      </div>
-
-      {/* Mobile Only Search Box */}
-      <div
-        onClick={() => {
-          window.dispatchEvent(new CustomEvent("open-search-modal"));
-        }}
-        className="mobile-search-box md:hidden w-full max-w-sm mx-auto mb-6 flex items-center gap-2.5 h-11 px-4 rounded-full border border-border/40 bg-background/25 backdrop-blur-lg hover:bg-background/40 active:scale-98 transition-all cursor-pointer shadow-lg shadow-black/5"
-      >
-        <Search className="h-4.5 w-4.5 text-muted-foreground/80" />
-        <span className="text-sm text-muted-foreground/60 select-none">
-          {t("search")}
-        </span>
       </div>
 
       <TooltipProvider delayDuration={150}>

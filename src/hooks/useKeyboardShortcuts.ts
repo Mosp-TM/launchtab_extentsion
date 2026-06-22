@@ -10,12 +10,12 @@ import {
 } from "@/lib/keyboardShortcuts";
 
 interface UseKeyboardShortcutsProps {
-  onSearchModalOpen?: (initialQuery?: string) => void;
+  onSearchFocus?: (initialQuery?: string) => void;
   onAIModalOpen?: () => void;
 }
 
 export const useKeyboardShortcuts = ({
-  onSearchModalOpen,
+  onSearchFocus,
   onAIModalOpen,
 }: UseKeyboardShortcutsProps = {}) => {
   const getTabByShortcut = useTabsStore((state) => state.getTabByShortcut);
@@ -55,7 +55,7 @@ export const useKeyboardShortcuts = ({
       if (isPlainSlash) {
         event.preventDefault();
         event.stopPropagation();
-        onSearchModalOpen?.();
+        onSearchFocus?.();
         return;
       }
 
@@ -66,7 +66,7 @@ export const useKeyboardShortcuts = ({
       if (isTypingTriggerEvent(event)) {
         event.preventDefault();
         event.stopPropagation();
-        onSearchModalOpen?.(event.key === " " ? " " : event.key);
+        onSearchFocus?.(event.key === " " ? " " : event.key);
         return;
       }
 
@@ -108,6 +108,6 @@ export const useKeyboardShortcuts = ({
     getTabByShortcut,
     incrementVisitCount,
     onAIModalOpen,
-    onSearchModalOpen,
+    onSearchFocus,
   ]);
 };
