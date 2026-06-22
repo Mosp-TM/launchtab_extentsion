@@ -1,6 +1,43 @@
 export const escapeRegExp = (value: string) =>
   value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+export function renderCompletionBold(text: string, query: string) {
+  const trimmed = query.trim();
+  if (!trimmed) return text;
+
+  const lowerText = text.toLowerCase();
+  const lowerQuery = trimmed.toLowerCase();
+
+  if (lowerText.startsWith(lowerQuery)) {
+    const prefix = text.slice(0, trimmed.length);
+    const suffix = text.slice(trimmed.length);
+    if (!suffix) return prefix;
+    return (
+      <>
+        {prefix}
+        <span className="font-semibold">{suffix}</span>
+      </>
+    );
+  }
+
+  let shared = 0;
+  const max = Math.min(lowerText.length, lowerQuery.length);
+  while (shared < max && lowerText[shared] === lowerQuery[shared]) {
+    shared += 1;
+  }
+
+  const prefix = text.slice(0, shared);
+  const suffix = text.slice(shared);
+  if (!suffix) return prefix;
+
+  return (
+    <>
+      {prefix}
+      <span className="font-semibold">{suffix}</span>
+    </>
+  );
+}
+
 export function renderHighlightedMatch(
   text: string,
   searchText: string,

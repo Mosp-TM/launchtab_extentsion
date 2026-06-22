@@ -8,8 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Search01Icon } from "@hugeicons/core-free-icons";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useSettingsStore } from "@/store/settingsStore";
@@ -21,6 +20,7 @@ import { useSuggestions } from "@/components/SearchModal/useSuggestions";
 import { SuggestionList } from "@/components/SearchModal/SuggestionList";
 import { SuggestionItem } from "@/components/SearchModal/types";
 import { isUrl } from "@/components/SearchModal/utils";
+import { useSearchAutocomplete } from "@/hooks/useSearchAutocomplete";
 import { cn } from "@/lib/utils";
 
 export type HomeSearchBarHandle = {
@@ -31,6 +31,53 @@ interface HomeSearchBarProps {
   className?: string;
   autoFocus?: boolean;
   variant?: "default" | "launchpad";
+}
+
+function SearchEngineMark({ engine }: { engine: string }) {
+  if (engine === "duckduckgo") {
+    return (
+      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#DE5833] text-[10px] font-bold text-white">
+        D
+      </span>
+    );
+  }
+
+  if (engine === "bing") {
+    return (
+      <span className="flex h-5 w-5 items-center justify-center rounded-sm bg-[#008373] text-[10px] font-bold text-white">
+        b
+      </span>
+    );
+  }
+
+  if (engine === "brave") {
+    return (
+      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#FB542B] text-[10px] font-bold text-white">
+        B
+      </span>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0" aria-hidden="true">
+      <path
+        fill="#4285F4"
+        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+      />
+      <path
+        fill="#34A853"
+        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+      />
+      <path
+        fill="#EA4335"
+        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+      />
+    </svg>
+  );
 }
 
 export const HomeSearchBar = forwardRef<
@@ -59,10 +106,12 @@ export const HomeSearchBar = forwardRef<
   const incrementVisitCount = useTabsStore((s) => s.incrementVisitCount);
   const t = useTranslation(language);
 
+  const apiSuggestions = useSearchAutocomplete(query, searchEngine);
+
   const { allItems, localCount, inlineValue, inlineIsHistory, inlineSuffix } =
     useSuggestions({
       query,
-      apiSuggestions: [],
+      apiSuggestions,
       language,
     });
 
@@ -70,7 +119,7 @@ export const HomeSearchBar = forwardRef<
     focus: (seedText = "") => {
       if (seedText) {
         setQuery(seedText);
-        setActiveIndex(-1);
+        setActiveIndex(seedText.trim() && isLaunchpad ? 0 : -1);
       }
       const el = inputRef.current;
       if (!el) return;
@@ -106,8 +155,8 @@ export const HomeSearchBar = forwardRef<
   }, [autoFocus]);
 
   useEffect(() => {
-    setActiveIndex(-1);
-  }, [query]);
+    setActiveIndex(isLaunchpad && query.trim() ? 0 : -1);
+  }, [query, isLaunchpad]);
 
   const isHistoryComplete =
     !isInlineHistoryDismissed && inlineIsHistory && !!inlineValue;
@@ -181,7 +230,7 @@ export const HomeSearchBar = forwardRef<
     if (!inlineValue) return false;
     setIsInlineHistoryDismissed(false);
     setQuery(inlineValue);
-    setActiveIndex(-1);
+    setActiveIndex(isLaunchpad ? 0 : -1);
     requestAnimationFrame(() => {
       inputRef.current?.setSelectionRange(
         inlineValue.length,
@@ -191,13 +240,16 @@ export const HomeSearchBar = forwardRef<
     return true;
   };
 
+  const hasSearchAction = isLaunchpad && !!query.trim();
+  const totalRows = (hasSearchAction ? 1 : 0) + allItems.length;
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     const isPlainCharacterKey =
       e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey;
 
     if (isHistoryComplete && (e.key === "Backspace" || isPlainCharacterKey)) {
       e.preventDefault();
-      setActiveIndex(-1);
+      setActiveIndex(isLaunchpad && query.trim() ? 0 : -1);
       setIsInlineHistoryDismissed(false);
       if (e.key === "Backspace") {
         setQuery((prev) => prev.slice(0, -1));
@@ -209,7 +261,7 @@ export const HomeSearchBar = forwardRef<
 
     if (isHistoryComplete && (e.key === "ArrowLeft" || e.key === "Delete")) {
       e.preventDefault();
-      setActiveIndex(-1);
+      setActiveIndex(isLaunchpad && query.trim() ? 0 : -1);
       setIsInlineHistoryDismissed(true);
       requestAnimationFrame(() => {
         const caretPos =
@@ -221,7 +273,7 @@ export const HomeSearchBar = forwardRef<
 
     if (isHistoryComplete && e.key === "Home") {
       e.preventDefault();
-      setActiveIndex(-1);
+      setActiveIndex(isLaunchpad && query.trim() ? 0 : -1);
       setIsInlineHistoryDismissed(true);
       requestAnimationFrame(() => {
         inputRef.current?.setSelectionRange(0, 0);
@@ -236,16 +288,27 @@ export const HomeSearchBar = forwardRef<
     }
 
     if (e.key === "ArrowDown") {
-      if (!allItems.length) return;
+      if (!totalRows) return;
       e.preventDefault();
-      setActiveIndex((i) => (i < 0 ? 0 : Math.min(i + 1, allItems.length - 1)));
+      setActiveIndex((i) => {
+        if (i < 0) return 0;
+        return Math.min(i + 1, totalRows - 1);
+      });
     } else if (e.key === "ArrowUp") {
-      if (!allItems.length) return;
+      if (!totalRows) return;
       e.preventDefault();
-      setActiveIndex((i) => (i < 0 ? allItems.length - 1 : Math.max(i - 1, 0)));
+      setActiveIndex((i) => {
+        if (i < 0) return totalRows - 1;
+        return Math.max(i - 1, 0);
+      });
     } else if (e.key === "Enter") {
       e.preventDefault();
-      const active = activeIndex >= 0 ? allItems[activeIndex] : undefined;
+      if (hasSearchAction && activeIndex === 0) {
+        handleSearchValue(query);
+        return;
+      }
+      const itemIndex = hasSearchAction ? activeIndex - 1 : activeIndex;
+      const active = itemIndex >= 0 ? allItems[itemIndex] : undefined;
       if (active) {
         handleSuggestionSelect(active);
         return;
@@ -275,96 +338,132 @@ export const HomeSearchBar = forwardRef<
           : t("google");
 
   const showSuggestions =
-    (isFocused || query.trim().length > 0) && allItems.length > 0;
+    (isFocused || query.trim().length > 0) &&
+    (allItems.length > 0 || (isLaunchpad && !!query.trim()));
+
+  const isExpanded = isLaunchpad && (isFocused || showSuggestions);
+  const placeholder = isLaunchpad
+    ? `Search with ${providerLabel} or enter address`
+    : `${t("search")} ${providerLabel} or enter a URL...`;
 
   return (
     <section className={cn("w-full", className)} aria-label="Search">
       <div
         className={cn(
-          "relative transition-shadow",
+          "relative overflow-hidden transition-all duration-200",
           isLaunchpad
-            ? "rounded-xl border border-white/12 bg-black/30 shadow-lg shadow-black/20 backdrop-blur-xl"
+            ? isExpanded
+              ? "rounded-2xl border border-sky-400/35 bg-[#1c1c1e]/88 shadow-2xl shadow-black/30 backdrop-blur-xl"
+              : "rounded-full border border-white/20 bg-white shadow-xl shadow-black/15"
             : "rounded-2xl border border-white/20 bg-background/55 shadow-2xl shadow-black/10 backdrop-blur-xl",
-          isFocused &&
-            (isLaunchpad
-              ? "border-white/25 bg-black/40"
-              : "border-white/30 bg-background/65 shadow-black/20"),
+          !isLaunchpad &&
+            isFocused &&
+            "border-white/30 bg-background/65 shadow-black/20",
         )}
       >
-        {!isLaunchpad && (
-          <HugeiconsIcon
-            icon={Search01Icon}
-            size={18}
-            strokeWidth={2}
-            className="pointer-events-none absolute left-5 top-1/2 z-10 -translate-y-1/2 text-muted-foreground/80"
-          />
-        )}
+        <div className="relative flex items-center">
+          {isLaunchpad && (
+            <div
+              className={cn(
+                "flex shrink-0 items-center gap-0.5 pl-4",
+                isExpanded ? "text-white/70" : "text-neutral-500",
+              )}
+            >
+              <SearchEngineMark engine={searchEngine} />
+              <ChevronDown className="h-3.5 w-3.5 opacity-50" aria-hidden />
+            </div>
+          )}
 
-        {inlineSuffix && !isHistoryComplete && (
-          <div
-            aria-hidden="true"
+          {inlineSuffix && !isHistoryComplete && !isLaunchpad && (
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 flex items-center overflow-hidden whitespace-pre pl-14 pr-16 text-base"
+            >
+              <span className="invisible">{query}</span>
+              <span className="text-muted-foreground/45">{inlineSuffix}</span>
+            </div>
+          )}
+
+          <Input
+            ref={inputRef}
+            placeholder={placeholder}
+            value={isHistoryComplete ? inlineValue! : query}
+            onChange={(e) => {
+              if (isHistoryComplete) {
+                const cursorPos =
+                  e.target.selectionStart ?? e.target.value.length;
+                setQuery(e.target.value.slice(0, cursorPos));
+              } else {
+                setQuery(e.target.value);
+              }
+            }}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => {
+              window.setTimeout(() => setIsFocused(false), 120);
+            }}
+            onKeyDown={handleKeyDown}
             className={cn(
-              "pointer-events-none absolute inset-0 flex items-center overflow-hidden whitespace-pre text-base",
+              "relative border-0 bg-transparent shadow-none focus-visible:ring-0",
               isLaunchpad
-                ? "h-12 rounded-xl pl-4 pr-12"
-                : "h-14 rounded-2xl pl-14 pr-16 md:h-16 md:text-lg",
+                ? cn(
+                    "h-12 flex-1 rounded-none pr-12 text-base",
+                    isExpanded
+                      ? "pl-3 text-white placeholder:text-white/45"
+                      : "pl-3 text-neutral-800 placeholder:text-neutral-400",
+                  )
+                : "h-14 rounded-2xl pl-14 pr-16 text-base md:h-16 md:text-lg",
             )}
-          >
-            <span className="invisible">{query}</span>
-            <span className="text-muted-foreground/45">{inlineSuffix}</span>
-          </div>
-        )}
+          />
 
-        <Input
-          ref={inputRef}
-          placeholder={
-            isLaunchpad
-              ? "Search or Enter address"
-              : `${t("search")} ${providerLabel} or enter a URL...`
-          }
-          value={isHistoryComplete ? inlineValue! : query}
-          onChange={(e) => {
-            if (isHistoryComplete) {
-              const cursorPos =
-                e.target.selectionStart ?? e.target.value.length;
-              setQuery(e.target.value.slice(0, cursorPos));
-            } else {
-              setQuery(e.target.value);
+          <Button
+            type="button"
+            size="sm"
+            onClick={() =>
+              handleSearchValue(isHistoryComplete ? inlineValue! : query)
             }
-          }}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => {
-            window.setTimeout(() => setIsFocused(false), 120);
-          }}
-          onKeyDown={handleKeyDown}
-          className={cn(
-            "relative border-0 bg-transparent shadow-none focus-visible:ring-0",
-            isLaunchpad
-              ? "h-12 rounded-xl pl-4 pr-12 text-base text-foreground/90 placeholder:text-foreground/40"
-              : "h-14 rounded-2xl pl-14 pr-16 text-base md:h-16 md:text-lg",
-          )}
-        />
+            aria-label={`Search with ${providerLabel}`}
+            className={cn(
+              "absolute right-2 top-1/2 -translate-y-1/2 p-0 shadow-none",
+              isLaunchpad
+                ? cn(
+                    "h-8 w-8 rounded-full border-0 bg-transparent",
+                    isExpanded
+                      ? "text-white/70 hover:bg-white/10 hover:text-white"
+                      : "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800",
+                  )
+                : "h-10 w-10 rounded-xl border border-border/40 bg-background/80 text-muted-foreground hover:text-foreground",
+            )}
+            disabled={!query.trim()}
+          >
+            <ArrowRight className="h-4 w-4" strokeWidth={2} />
+          </Button>
+        </div>
 
-        <Button
-          type="button"
-          size="sm"
-          onClick={() =>
-            handleSearchValue(isHistoryComplete ? inlineValue! : query)
-          }
-          aria-label={`Search with ${providerLabel}`}
-          className={cn(
-            "absolute right-2 top-1/2 -translate-y-1/2 p-0 text-muted-foreground shadow-none hover:bg-white/10 hover:text-foreground",
-            isLaunchpad
-              ? "h-8 w-8 rounded-lg border-0 bg-transparent"
-              : "h-10 w-10 rounded-xl border border-border/40 bg-background/80",
-          )}
-          disabled={!query.trim()}
-        >
-          <HugeiconsIcon icon={Search01Icon} size={16} strokeWidth={2} />
-        </Button>
+        {showSuggestions && (
+          <>
+            <div
+              className={cn(
+                "mx-4 h-px",
+                isExpanded ? "bg-white/10" : "bg-neutral-200",
+              )}
+            />
+            <SuggestionList
+              items={allItems}
+              localCount={localCount}
+              activeIndex={activeIndex}
+              query={query}
+              onHover={setActiveIndex}
+              onSelect={handleSuggestionSelect}
+              variant="launchpad"
+              providerLabel={providerLabel}
+              onSearchAction={() => handleSearchValue(query)}
+              embedded
+            />
+          </>
+        )}
       </div>
 
-      {showSuggestions && (
+      {!isLaunchpad && showSuggestions && (
         <SuggestionList
           items={allItems}
           localCount={localCount}
