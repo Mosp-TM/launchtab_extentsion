@@ -339,8 +339,8 @@ export const useSettingsStore = create<SettingsState>()(
     }),
     {
       name: "settings-store",
-      version: 3,
-      migrate: (persistedState) => {
+      version: 4,
+      migrate: (persistedState, version) => {
         if (!persistedState || typeof persistedState !== "object")
           return persistedState;
         const state = persistedState as Record<string, unknown>;
@@ -351,6 +351,9 @@ export const useSettingsStore = create<SettingsState>()(
           state.cardSize = DEFAULT_CARD_SIZE;
         }
         state.dynamicWallpapers = DEFAULT_DYNAMIC_WALLPAPERS;
+        if (version < 4) {
+          state.autoFocusSearch = true;
+        }
         return state;
       },
       partialize: (state) => {

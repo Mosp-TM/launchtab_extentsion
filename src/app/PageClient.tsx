@@ -156,12 +156,6 @@ export function PageClient() {
   useDefaultAssets();
   useStickyNoteAlarms();
 
-  useEffect(() => {
-    if (isHydrated && autoFocusSearch) {
-      searchRef.current?.focus();
-    }
-  }, [isHydrated, autoFocusSearch]);
-
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
       <BackgroundLayer url={backgroundImageUrl} opacity={bgOpacity} />
@@ -174,7 +168,11 @@ export function PageClient() {
             </div>
           )}
 
-          <HomeSearchBar ref={searchRef} className="mb-8 w-full max-w-2xl" />
+          <HomeSearchBar
+            ref={searchRef}
+            className="mb-8 w-full max-w-2xl"
+            autoFocus={isHydrated && autoFocusSearch}
+          />
 
           <div className="flex w-full flex-1 flex-col">
             <TabsZone />

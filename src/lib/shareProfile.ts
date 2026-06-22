@@ -68,7 +68,7 @@ export const SHARE_SETTINGS_DEFAULTS: ShareProfileSettings = {
   clockPosition: "top-right",
   clockStyle: "modern",
   isDynamicWallpaper: true,
-  autoFocusSearch: false,
+  autoFocusSearch: true,
 };
 
 const THEME_VALUES: Theme[] = ["light", "dark", "system"];

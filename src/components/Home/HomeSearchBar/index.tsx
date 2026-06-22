@@ -29,12 +29,13 @@ export type HomeSearchBarHandle = {
 
 interface HomeSearchBarProps {
   className?: string;
+  autoFocus?: boolean;
 }
 
 export const HomeSearchBar = forwardRef<
   HomeSearchBarHandle,
   HomeSearchBarProps
->(function HomeSearchBar({ className }, ref) {
+>(function HomeSearchBar({ className, autoFocus = false }, ref) {
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isFocused, setIsFocused] = useState(false);
@@ -66,15 +67,38 @@ export const HomeSearchBar = forwardRef<
         setQuery(seedText);
         setActiveIndex(-1);
       }
-      requestAnimationFrame(() => {
-        const el = inputRef.current;
-        if (!el) return;
-        el.focus();
-        const pos = seedText.length;
-        el.setSelectionRange(pos, pos);
-      });
+      const el = inputRef.current;
+      if (!el) return;
+      el.focus({ preventScroll: true });
+      const pos = seedText.length;
+      el.setSelectionRange(pos, pos);
     },
   }));
+
+  useEffect(() => {
+    if (!autoFocus) return;
+
+    const focusInput = () => {
+      const el = inputRef.current;
+      if (!el) return;
+      el.focus({ preventScroll: true });
+      el.setSelectionRange(el.value.length, el.value.length);
+    };
+
+    focusInput();
+    const rafId = requestAnimationFrame(focusInput);
+    const timeoutIds = [50, 150, 350].map((delay) =>
+      window.setTimeout(focusInput, delay),
+    );
+
+    window.addEventListener("focus", focusInput);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      timeoutIds.forEach((id) => window.clearTimeout(id));
+      window.removeEventListener("focus", focusInput);
+    };
+  }, [autoFocus]);
 
   useEffect(() => {
     setActiveIndex(-1);
