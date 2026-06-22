@@ -11,16 +11,9 @@ import {
   Maximize01Icon,
   TimeScheduleIcon,
   Share01Icon,
-  Crown02Icon,
-  AiNetworkIcon,
-  UserIcon,
-  AiBrain01Icon,
-  CloudUploadIcon,
-  Logout01Icon,
   RotateRight01Icon,
 } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
-import { useAuthStore } from "@/store/authStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { useTranslation } from "@/constants/languages";
 import { cn } from "@/lib/utils";
@@ -30,18 +23,14 @@ import type { SettingsSection } from "./types";
 interface SettingsSidebarProps {
   activeSection: SettingsSection;
   onSectionChange: (section: SettingsSection) => void;
-  onLogout: () => void;
 }
 
 export function SettingsSidebar({
   activeSection,
   onSectionChange,
-  onLogout,
 }: SettingsSidebarProps) {
-  const { isAuthenticated, user } = useAuthStore();
   const { language } = useSettingsStore();
   const t = useTranslation(language);
-  const userRole = user?.role ?? "free";
 
   const APP_NAV: {
     id: SettingsSection;
@@ -56,25 +45,6 @@ export function SettingsSidebar({
     { id: "shortcuts", label: "Shortcuts", icon: Maximize01Icon },
     { id: "history", label: t("history"), icon: TimeScheduleIcon },
     { id: "profile-share", label: t("profileShare"), icon: Share01Icon },
-    ...(userRole === "lite" || userRole === "plus"
-      ? [
-          {
-            id: "ai-models" as SettingsSection,
-            label: "AI Models",
-            icon: AiNetworkIcon,
-          },
-        ]
-      : []),
-  ];
-
-  const ACCOUNT_ITEMS: {
-    id: SettingsSection;
-    label: string;
-    icon: IconSvgElement;
-  }[] = [
-    { id: "account-profile", label: "My Profile", icon: UserIcon },
-    { id: "account-memory", label: "Memory", icon: AiBrain01Icon },
-    { id: "account-sync", label: "Cloud Sync", icon: CloudUploadIcon },
   ];
 
   const navItemClass = (id: SettingsSection) =>
@@ -124,75 +94,7 @@ export function SettingsSidebar({
             {item.label}
           </button>
         ))}
-
-        <div className="mx-4 my-2 border-t border-border/20" />
-        <p className="px-4 pb-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/50">
-          Account
-        </p>
-
-        {!isAuthenticated && (
-          <button
-            type="button"
-            onClick={() => onSectionChange("account-login")}
-            className={navItemClass("account-login")}
-          >
-            <HugeiconsIcon
-              icon={UserIcon}
-              size={15}
-              strokeWidth={1.5}
-              className="shrink-0 opacity-80"
-            />
-            Sign in
-          </button>
-        )}
-
-        {ACCOUNT_ITEMS.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => onSectionChange(item.id)}
-            className={cn(
-              navItemClass(item.id),
-              !isAuthenticated && "opacity-40 cursor-not-allowed",
-            )}
-          >
-            <HugeiconsIcon
-              icon={item.icon}
-              size={15}
-              strokeWidth={1.5}
-              className="shrink-0 opacity-80"
-            />
-            {item.label}
-          </button>
-        ))}
-
-        {isAuthenticated && (
-          <button
-            type="button"
-            onClick={onLogout}
-            className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-accent/60 transition-colors"
-          >
-            <HugeiconsIcon
-              icon={Logout01Icon}
-              size={15}
-              strokeWidth={1.5}
-              className="shrink-0"
-            />
-            Log out
-          </button>
-        )}
       </nav>
-
-      {isAuthenticated && (
-        <div className="border-t border-border/20 px-4 py-3">
-          <p className="text-xs font-medium text-foreground truncate">
-            {user?.name || "Account"}
-          </p>
-          <p className="text-[10px] text-muted-foreground truncate">
-            {user?.email}
-          </p>
-        </div>
-      )}
     </div>
   );
 }

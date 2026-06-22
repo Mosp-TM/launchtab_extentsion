@@ -4,15 +4,13 @@ import { useState, useEffect, useRef } from "react";
 import TabsZone from "@/components/Home/TabsZone";
 import SettingsMenu from "@/components/SettingsMenu";
 import SearchModal from "@/components/SearchModal";
-import MuradianAIModal from "@/components/MuradianAIModal";
+import AISidebar from "@/components/AISidebar";
 import StickyAlarmDialog from "@/components/Notepad/StickyAlarmDialog";
-import { AuthDialog } from "@/components/Auth/AuthDialog";
 import GithubLink from "@/components/Home/GithubLink";
 import {
   normalizeDynamicWallpaper,
   useSettingsStore,
 } from "@/store/settingsStore";
-import { useAuthStore } from "@/store/authStore";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { useMediaUrl } from "@/hooks/useMediaUrl";
 import { useDefaultAssets } from "@/hooks/useDefaultAssets";
@@ -62,25 +60,20 @@ export function PageClient() {
     { id: 0, seedText: "" },
   );
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-  const [isMuradianModalOpen, setIsMuradianModalOpen] = useState(false);
-  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
+  const [isAISidebarOpen, setIsAISidebarOpen] = useState(false);
 
   const hasPickedDynamicWallpaperRef = useRef(false);
   const lastDynamicWallpaperThemeRef = useRef<string | null>(null);
   const isSearchModalOpenRef = useRef(false);
-  const isMuradianModalOpenRef = useRef(false);
-  const isAuthDialogOpenRef = useRef(false);
+  const isAISidebarOpenRef = useRef(false);
   const isSearchInputReadyRef = useRef(false);
 
   useEffect(() => {
     isSearchModalOpenRef.current = isSearchModalOpen;
   }, [isSearchModalOpen]);
   useEffect(() => {
-    isMuradianModalOpenRef.current = isMuradianModalOpen;
-  }, [isMuradianModalOpen]);
-  useEffect(() => {
-    isAuthDialogOpenRef.current = isAuthDialogOpen;
-  }, [isAuthDialogOpen]);
+    isAISidebarOpenRef.current = isAISidebarOpen;
+  }, [isAISidebarOpen]);
 
   useEffect(() => {
     const handleOpenSearch = (e: Event) => {
@@ -185,25 +178,14 @@ export function PageClient() {
 
   const shouldShowRightSidebar = showRightSidebar && layoutPreset !== "focus";
 
-  const { isAuthenticated, initCloudSession } = useAuthStore();
-
-  useEffect(() => {
-    if (isHydrated) initCloudSession();
-  }, [isHydrated, initCloudSession]);
-
   useKeyboardShortcuts({
     onAIModalOpen: () => {
-      if (isSearchModalOpenRef.current || isAuthDialogOpenRef.current) return;
-      if (!isAuthenticated) {
-        isAuthDialogOpenRef.current = true;
-        setIsAuthDialogOpen(true);
-        return;
-      }
-      isMuradianModalOpenRef.current = true;
-      setIsMuradianModalOpen(true);
+      if (isSearchModalOpenRef.current) return;
+      isAISidebarOpenRef.current = true;
+      setIsAISidebarOpen(true);
     },
     onSearchModalOpen: (initialQuery) => {
-      if (isMuradianModalOpenRef.current || isAuthDialogOpenRef.current) return;
+      if (isAISidebarOpenRef.current) return;
       if (initialQuery) {
         setSearchOpenRequest((r) => ({
           id: r.id + 1,
@@ -259,11 +241,7 @@ export function PageClient() {
       {enableSearchHoverZone && (
         <SearchHoverZone
           onEnter={() => {
-            if (
-              isSearchModalOpenRef.current ||
-              isMuradianModalOpenRef.current ||
-              isAuthDialogOpenRef.current
-            )
+            if (isSearchModalOpenRef.current || isAISidebarOpenRef.current)
               return;
             setSearchOpenRequest((r) => ({ id: r.id + 1, seedText: "" }));
             isSearchModalOpenRef.current = true;
@@ -284,18 +262,11 @@ export function PageClient() {
           isSearchInputReadyRef.current = true;
         }}
       />
-      <MuradianAIModal
-        open={isAuthenticated && isMuradianModalOpen}
-        onOpenChange={(nextOpen) => {
-          isMuradianModalOpenRef.current = nextOpen;
-          setIsMuradianModalOpen(nextOpen);
-        }}
-      />
-      <AuthDialog
-        open={isAuthDialogOpen}
-        onOpenChange={(nextOpen) => {
-          isAuthDialogOpenRef.current = nextOpen;
-          setIsAuthDialogOpen(nextOpen);
+      <AISidebar
+        open={isAISidebarOpen}
+        onClose={() => {
+          isAISidebarOpenRef.current = false;
+          setIsAISidebarOpen(false);
         }}
       />
       <StickyAlarmDialog />

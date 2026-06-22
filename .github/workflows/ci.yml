@@ -14,22 +14,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: 10
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
+          bun-version: latest
 
       - name: Install dependencies
-        run: pnpm install
+        run: bun install
 
       - name: Check formatting (Prettier)
-        run: pnpm format:check
+        run: bun run format:check
 
       - name: Lint (ESLint)
-        run: pnpm lint
+        run: bun run lint
+
+      - name: Build Chrome extension
+        run: bun run build

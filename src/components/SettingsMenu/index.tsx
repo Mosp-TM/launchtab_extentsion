@@ -2,11 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  Settings01Icon,
-  RotateRight01Icon,
-  Tick01Icon,
-} from "@hugeicons/core-free-icons";
+import { Settings01Icon, RotateRight01Icon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -21,45 +17,28 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { useSettingsStore } from "@/store/settingsStore";
-import { useAuthStore } from "@/store/authStore";
 import { useTranslation } from "@/constants/languages";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
 
-// Section components
 import { AppearanceSection } from "./sections/AppearanceSection";
 import { WallpaperSection } from "./sections/WallpaperSection";
 import { LayoutSection } from "./sections/LayoutSection";
 import { BehaviorSection } from "./sections/BehaviorSection";
 import { ProfileShareSection } from "./sections/ProfileShareSection";
-import { AIModelsSection } from "./sections/AIModelsSection";
-import { AccountLoginSection } from "./sections/AccountLoginSection";
-import { AccountProfileSection } from "./sections/AccountProfileSection";
-import { AccountMemorySection } from "./sections/AccountMemorySection";
-import { AccountSyncSection } from "./sections/AccountSyncSection";
-
-// Sub-panels (existing, used as direct sections)
 import { ClockSettingsPanel } from "./Clock/ClockSettingsPanel";
 import { ResizeShortcutsPanel } from "./Shortcuts/ResizeShortcutsPanel";
 import { HistoryPanel } from "./History/HistoryPanel";
-
-// Mobile-only section components
 import { ThemeLanguageSection } from "./Theme/ThemeLanguageSection";
 import { SearchPositionSection } from "./Search/SearchPositionSection";
 import { TogglesSection } from "./Toggles/TogglesSection";
 import { BackgroundSection } from "./Background/BackgroundSection";
 import { ActionGrid } from "./Shortcuts/ActionGrid";
-
-// Dialogs
 import { ResizeShortcutsDialog } from "./Shortcuts/ResizeShortcutsDialog";
 import { BackgroundImageDialog } from "./Background/BackgroundImageDialog";
 import { ClockColorDialog } from "./Clock/ClockColorDialog";
 import { HistoryDialog } from "./History/HistoryDialog";
 import { ResetDialog } from "./Reset/ResetDialog";
 import { ProfileDialog } from "./Profile/ProfileDialog";
-import { AccountButton } from "../Auth/AccountButton";
-
-// Layout
 import { SettingsSidebar } from "./SettingsSidebar";
 import type { SettingsSection } from "./types";
 
@@ -72,11 +51,6 @@ const SECTION_TITLES: Record<SettingsSection, string> = {
   shortcuts: "Shortcuts",
   history: "History",
   "profile-share": "Profile Share",
-  "ai-models": "AI Models",
-  "account-login": "Sign In",
-  "account-profile": "My Profile",
-  "account-memory": "Memory",
-  "account-sync": "Cloud Sync",
 };
 
 function useIsDesktop() {
@@ -111,29 +85,7 @@ const SettingsMenu = () => {
     setResizeDialogOpen,
   } = useSettingsStore();
 
-  const { isAuthenticated, user, logout, lastSynced } = useAuthStore();
   const t = useTranslation(language);
-  const userRole = user?.role ?? "free";
-
-  const handleSectionChange = (s: SettingsSection) => {
-    if (
-      !isAuthenticated &&
-      (s === "account-profile" ||
-        s === "account-memory" ||
-        s === "account-sync")
-    ) {
-      setActiveSection("account-login");
-      return;
-    }
-    setActiveSection(s);
-  };
-
-  const handleLogout = async () => {
-    setIsSettingsOpen(false);
-    await logout();
-    toast.success("Logged out");
-    setActiveSection("appearance");
-  };
 
   const renderSection = () => {
     switch (activeSection) {
@@ -153,20 +105,6 @@ const SettingsMenu = () => {
         return <HistoryPanel />;
       case "profile-share":
         return <ProfileShareSection />;
-      case "ai-models":
-        return <AIModelsSection userRole={userRole} />;
-      case "account-login":
-        return (
-          <AccountLoginSection
-            onLoginComplete={() => setActiveSection("account-profile")}
-          />
-        );
-      case "account-profile":
-        return <AccountProfileSection />;
-      case "account-memory":
-        return <AccountMemorySection />;
-      case "account-sync":
-        return <AccountSyncSection />;
     }
   };
 
@@ -187,22 +125,17 @@ const SettingsMenu = () => {
           <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
             <DialogContent
               hideDefaultClose
-              className={cn(
-                "p-0 overflow-hidden rounded-2xl w-[85vw] max-w-[85vw] h-[85vh] max-h-[85vh]",
-                user?.role === "plus" && "border-violet-500/60",
-                user?.role === "lite" && "border-amber-400/60",
-              )}
+              className="p-0 overflow-hidden rounded-2xl w-[85vw] max-w-[85vw] h-[85vh] max-h-[85vh]"
             >
               <DialogTitle className="sr-only">{t("settings")}</DialogTitle>
               <DialogDescription className="sr-only">
-                App settings and account management
+                App settings
               </DialogDescription>
 
               <div className="flex h-full overflow-hidden">
                 <SettingsSidebar
                   activeSection={activeSection}
-                  onSectionChange={handleSectionChange}
-                  onLogout={handleLogout}
+                  onSectionChange={setActiveSection}
                 />
 
                 <div className="flex flex-col flex-1 min-w-0 min-h-0 overflow-hidden">
@@ -240,23 +173,20 @@ const SettingsMenu = () => {
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 {t("settings")}
               </span>
-              <div className="flex items-center gap-1">
-                <AccountButton />
-                <ResetDialog>
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    className="h-6 w-6 text-destructive hover:bg-destructive/10"
-                    aria-label="Reset settings"
-                  >
-                    <HugeiconsIcon
-                      icon={RotateRight01Icon}
-                      size={12}
-                      strokeWidth={1.5}
-                    />
-                  </Button>
-                </ResetDialog>
-              </div>
+              <ResetDialog>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  className="h-6 w-6 text-destructive hover:bg-destructive/10"
+                  aria-label="Reset settings"
+                >
+                  <HugeiconsIcon
+                    icon={RotateRight01Icon}
+                    size={12}
+                    strokeWidth={1.5}
+                  />
+                </Button>
+              </ResetDialog>
             </div>
             <DropdownMenuSeparator />
             <ThemeLanguageSection />
@@ -301,17 +231,6 @@ const SettingsMenu = () => {
         open={isMobileProfileDialogOpen}
         onOpenChange={setIsMobileProfileDialogOpen}
       />
-
-      {isAuthenticated && lastSynced && (
-        <div className="hidden md:flex items-center text-[10px] text-muted-foreground gap-1 bg-muted/50 px-2 py-1 rounded-full border border-border/50">
-          <HugeiconsIcon
-            icon={Tick01Icon}
-            size={12}
-            className="text-green-500"
-          />
-          <span>Synced</span>
-        </div>
-      )}
     </div>
   );
 };

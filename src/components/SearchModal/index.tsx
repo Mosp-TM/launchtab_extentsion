@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
-import { apiUrl } from "@/lib/apiBase";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Search01Icon } from "@hugeicons/core-free-icons";
 import {
@@ -36,7 +35,6 @@ const SearchModal = ({
   onInputReady,
 }: SearchModalProps) => {
   const [query, setQuery] = useState("");
-  const [apiSuggestions, setApiSuggestions] = useState<string[]>([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isInlineHistoryDismissed, setIsInlineHistoryDismissed] =
     useState(false);
@@ -57,7 +55,7 @@ const SearchModal = ({
   const { allItems, localCount, inlineValue, inlineIsHistory, inlineSuffix } =
     useSuggestions({
       query,
-      apiSuggestions,
+      apiSuggestions: [],
       language,
     });
 
@@ -120,41 +118,6 @@ const SearchModal = ({
   useEffect(() => {
     setIsInlineHistoryDismissed(false);
   }, [query, open]);
-
-  // Fetch API suggestions
-  useEffect(() => {
-    const trimmed = query.trim();
-    if (!open || !trimmed) {
-      setApiSuggestions([]);
-      return;
-    }
-    const controller = new AbortController();
-    const timeoutId = window.setTimeout(async () => {
-      try {
-        const res = await fetch(
-          apiUrl(
-            `/api/analytics/search?query=${encodeURIComponent(trimmed)}&suggestions=1`,
-          ),
-          {
-            headers: { "x-home-ui-request": "search-analytics" },
-            signal: controller.signal,
-          },
-        );
-        if (!res.ok) {
-          setApiSuggestions([]);
-          return;
-        }
-        const payload = (await res.json()) as { data?: string[] };
-        setApiSuggestions(payload.data ?? []);
-      } catch (err) {
-        if ((err as Error).name !== "AbortError") setApiSuggestions([]);
-      }
-    }, 180);
-    return () => {
-      controller.abort();
-      window.clearTimeout(timeoutId);
-    };
-  }, [open, query]);
 
   const getSearchUrl = (text: string) => {
     const q = encodeURIComponent(text);

@@ -1,7 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { PageClient } from "@/app/PageClient";
-import { SiteVisitCounter } from "@/components/Home/SiteVisitCounter";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import "@/app/globals.css";
@@ -19,7 +18,6 @@ if (root) {
         disableTransitionOnChange
       >
         <PageClient />
-        <SiteVisitCounter />
         <Toaster />
       </ThemeProvider>
     </StrictMode>,
