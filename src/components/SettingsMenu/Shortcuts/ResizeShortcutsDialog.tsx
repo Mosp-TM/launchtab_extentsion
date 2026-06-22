@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Maximize2 } from "lucide-react";
+import { Maximize01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -55,7 +56,7 @@ export function ResizeShortcutsDialog({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Maximize2 className="h-5 w-5" />
+            <HugeiconsIcon icon={Maximize01Icon} size={20} strokeWidth={2} />
             Resize Shortcuts
           </DialogTitle>
           <DialogDescription>

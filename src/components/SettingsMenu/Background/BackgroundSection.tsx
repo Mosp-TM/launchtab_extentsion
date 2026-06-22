@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { Image as ImageIcon, Plus } from "lucide-react";
+import { Add01Icon, Image01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { AppImage } from "@/components/ui/AppImage";
 import {
   useSettingsStore,
@@ -67,7 +68,7 @@ export const BackgroundSection = () => {
         className="flex w-full items-center justify-between rounded-md px-2 py-1 transition-colors hover:bg-accent/50 group"
       >
         <div className="flex items-center gap-2">
-          <ImageIcon className="h-3.5 w-3.5 text-muted-foreground" />
+          <HugeiconsIcon icon={Image01Icon} size={14} strokeWidth={2} className="text-muted-foreground" />
           <span className="text-[11px] font-medium text-foreground/90 group-hover:text-foreground">
             {t("backgroundImage")}
           </span>
@@ -92,7 +93,7 @@ export const BackgroundSection = () => {
           onClick={() => fileInputRef.current?.click()}
           className="flex h-10 w-16 shrink-0 items-center justify-center rounded-md border-2 border-dashed border-border/40 bg-muted/10 hover:border-primary/50 hover:bg-muted/20 transition-all"
         >
-          <Plus className="h-3.5 w-3.5 text-muted-foreground" />
+          <HugeiconsIcon icon={Add01Icon} size={14} strokeWidth={2} className="text-muted-foreground" />
         </button>
 
         {DEFAULT_DYNAMIC_WALLPAPERS.map((wallpaper, idx) => {

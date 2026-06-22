@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Trash2,
-  Pencil,
-  Keyboard,
-  Clock,
-  ImageIcon,
-  Maximize2,
-} from "lucide-react";
+  Clock01Icon,
+  Image01Icon,
+  Maximize01Icon,
+  Delete02Icon,
+  Edit02Icon,
+  KeyboardIcon,
+} from "@hugeicons/core-free-icons";
 import { faviconUrl } from "@/lib/favicon";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -259,7 +260,12 @@ const SortableShortcutCard = ({
             className="gap-2.5 font-bold text-xs rounded-lg"
             onSelect={(e) => e.preventDefault()}
           >
-            <Pencil className="h-3.5 w-3.5 text-primary" />
+            <HugeiconsIcon
+              icon={Edit02Icon}
+              size={14}
+              strokeWidth={2}
+              className="text-primary"
+            />
             {t("edit")}
           </ContextMenuItem>
         </EditTabDialog>
@@ -268,7 +274,12 @@ const SortableShortcutCard = ({
             className="gap-2.5 font-bold text-xs rounded-lg"
             onSelect={(e) => e.preventDefault()}
           >
-            <Keyboard className="h-3.5 w-3.5 text-primary" />
+            <HugeiconsIcon
+              icon={KeyboardIcon}
+              size={14}
+              strokeWidth={2}
+              className="text-primary"
+            />
             {t("keyboardShortcut")}
           </ContextMenuItem>
         </ShortcutDialog>
@@ -284,7 +295,7 @@ const SortableShortcutCard = ({
             className="gap-2.5 font-bold text-xs rounded-lg text-destructive focus:text-destructive"
             onSelect={(e) => e.preventDefault()}
           >
-            <Trash2 className="h-3.5 w-3.5" />
+            <HugeiconsIcon icon={Delete02Icon} size={14} strokeWidth={2} />
             {t("deleteShortcut")}
           </ContextMenuItem>
         </DeleteConfirmDialog>
@@ -299,21 +310,36 @@ const SortableShortcutCard = ({
           onSelect={() => setClockDialogOpen(true)}
           className="gap-2.5 font-bold text-xs rounded-lg"
         >
-          <Clock className="h-3.5 w-3.5 text-primary" />
+          <HugeiconsIcon
+            icon={Clock01Icon}
+            size={14}
+            strokeWidth={2}
+            className="text-primary"
+          />
           {t("clockSettings")}
         </ContextMenuItem>
         <ContextMenuItem
           onSelect={() => setBackgroundDialogOpen(true)}
           className="gap-2.5 font-bold text-xs rounded-lg"
         >
-          <ImageIcon className="h-3.5 w-3.5 text-primary" />
+          <HugeiconsIcon
+            icon={Image01Icon}
+            size={14}
+            strokeWidth={2}
+            className="text-primary"
+          />
           {t("backgroundImage")}
         </ContextMenuItem>
         <ContextMenuItem
           onSelect={() => setResizeDialogOpen(true)}
           className="gap-2.5 font-bold text-xs rounded-lg"
         >
-          <Maximize2 className="h-3.5 w-3.5 text-primary" />
+          <HugeiconsIcon
+            icon={Maximize01Icon}
+            size={14}
+            strokeWidth={2}
+            className="text-primary"
+          />
           {t("resizeShortcuts")}
         </ContextMenuItem>
       </ContextMenuContent>

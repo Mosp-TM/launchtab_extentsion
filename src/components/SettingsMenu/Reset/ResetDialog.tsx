@@ -17,7 +17,8 @@ import { useTabsStore } from "@/store/tabsStore";
 import { useNotepadStore } from "@/store/notepadStore";
 import { useSearchHistoryStore } from "@/store/searchHistoryStore";
 import { useTranslation } from "@/constants/languages";
-import { AlertTriangle } from "lucide-react";
+import { Alert01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 interface ResetDialogProps {
   children: React.ReactNode;
@@ -66,7 +67,7 @@ export const ResetDialog = ({ children }: ResetDialogProps) => {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-destructive">
-            <AlertTriangle className="h-5 w-5" />
+            <HugeiconsIcon icon={Alert01Icon} size={20} strokeWidth={2} />
             {t("resetEverything")}
           </DialogTitle>
           <DialogDescription>{t("resetWarning")}</DialogDescription>

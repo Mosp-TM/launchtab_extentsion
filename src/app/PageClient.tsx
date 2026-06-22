@@ -20,7 +20,10 @@ import { useDefaultAssets } from "@/hooks/useDefaultAssets";
 import { useStickyNoteAlarms } from "@/hooks/useStickyNoteAlarms";
 import { useTheme } from "next-themes";
 import { BackgroundLayer } from "./_components/BackgroundLayer";
-import { ClockSection, CLOCK_HEADER_POSITION } from "./_components/ClockSection";
+import {
+  ClockSection,
+  CLOCK_HEADER_POSITION,
+} from "./_components/ClockSection";
 import { SidebarOverlay } from "./_components/SidebarOverlay";
 
 export function PageClient() {

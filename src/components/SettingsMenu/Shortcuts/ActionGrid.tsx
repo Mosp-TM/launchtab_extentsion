@@ -1,6 +1,12 @@
 "use client";
 
-import { Maximize2, History, Clock, User } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Clock01Icon,
+  Maximize01Icon,
+  TimeScheduleIcon,
+  UserIcon,
+} from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
 import { useSettingsStore } from "@/store/settingsStore";
 import { useTranslation } from "@/constants/languages";
@@ -29,7 +35,12 @@ export const ActionGrid = ({
         onClick={onResizeClick}
         className="h-9 justify-start gap-2 px-2 text-[11px] font-normal"
       >
-        <Maximize2 className="h-3.5 w-3.5 text-muted-foreground" />
+        <HugeiconsIcon
+          icon={Maximize01Icon}
+          size={14}
+          strokeWidth={2}
+          className="text-muted-foreground"
+        />
         {t("resizeShortcuts")}
       </Button>
       <Button
@@ -38,7 +49,12 @@ export const ActionGrid = ({
         onClick={onHistoryClick}
         className="h-9 justify-start gap-2 px-2 text-[11px] font-normal"
       >
-        <History className="h-3.5 w-3.5 text-muted-foreground" />
+        <HugeiconsIcon
+          icon={TimeScheduleIcon}
+          size={14}
+          strokeWidth={2}
+          className="text-muted-foreground"
+        />
         {t("history")}
       </Button>
       <Button
@@ -47,7 +63,12 @@ export const ActionGrid = ({
         onClick={onClockClick}
         className="h-9 justify-start gap-2 px-2 text-[11px] font-normal"
       >
-        <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+        <HugeiconsIcon
+          icon={Clock01Icon}
+          size={14}
+          strokeWidth={2}
+          className="text-muted-foreground"
+        />
         {t("clockSettings")}
       </Button>
       <Button
@@ -56,7 +77,12 @@ export const ActionGrid = ({
         onClick={onProfileClick}
         className="h-9 justify-start gap-2 px-2 text-[11px] font-normal"
       >
-        <User className="h-3.5 w-3.5 text-muted-foreground" />
+        <HugeiconsIcon
+          icon={UserIcon}
+          size={14}
+          strokeWidth={2}
+          className="text-muted-foreground"
+        />
         {t("profileShare")}
       </Button>
     </div>

@@ -1,6 +1,13 @@
 "use client";
 
-import { Monitor, Sun, Moon, Languages } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  ColorsIcon,
+  ComputerIcon,
+  LanguageCircleIcon,
+  Moon01Icon,
+  Sun01Icon,
+} from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { useSettingsStore, Theme } from "@/store/settingsStore";
@@ -42,13 +49,17 @@ export const ThemeLanguageSection = () => {
             handleThemeChange(themes[nextIndex]);
           }}
         >
-          {theme === "light" ? (
-            <Sun className="h-4 w-4" />
-          ) : theme === "dark" ? (
-            <Moon className="h-4 w-4" />
-          ) : (
-            <Monitor className="h-4 w-4" />
-          )}
+          <HugeiconsIcon
+            icon={
+              theme === "light"
+                ? Sun01Icon
+                : theme === "dark"
+                  ? Moon01Icon
+                  : ColorsIcon
+            }
+            size={16}
+            strokeWidth={2}
+          />
           <span className="text-[10px] font-semibold capitalize">
             {t(theme)}
           </span>
@@ -65,7 +76,7 @@ export const ThemeLanguageSection = () => {
           className="h-8 w-full justify-start gap-2 bg-background/50 hover:bg-accent"
           onClick={() => handleLanguageChange(language === "en" ? "bn" : "en")}
         >
-          <Languages className="h-4 w-4" />
+          <HugeiconsIcon icon={LanguageCircleIcon} size={16} strokeWidth={2} />
           <span className="text-[10px] font-semibold uppercase">
             {language === "en" ? "EN (English)" : "BN (বাংলা)"}
           </span>

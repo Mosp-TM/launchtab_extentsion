@@ -53,7 +53,9 @@ async function fetchBraveSuggestions(
     `https://search.brave.com/api/suggest?q=${encodeURIComponent(query)}`,
     { signal },
   );
-  const data = (await response.json()) as { results?: Array<{ query: string }> };
+  const data = (await response.json()) as {
+    results?: Array<{ query: string }>;
+  };
   return (data.results ?? []).map((item) => item.query).filter(Boolean);
 }
 
@@ -74,7 +76,10 @@ async function fetchSuggestions(
   }
 }
 
-export function useSearchAutocomplete(query: string, searchEngine: SearchEngine) {
+export function useSearchAutocomplete(
+  query: string,
+  searchEngine: SearchEngine,
+) {
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   useEffect(() => {

@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Download, Upload, User } from "lucide-react";
+import { Download01Icon, Upload01Icon, UserIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Dialog,
   DialogContent,
@@ -118,7 +119,7 @@ export const ProfileDialog = ({ open, onOpenChange }: ProfileDialogProps) => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
+              <HugeiconsIcon icon={UserIcon} size={20} strokeWidth={2} />
               {t("profileShare")}
             </DialogTitle>
             <DialogDescription>
@@ -132,7 +133,7 @@ export const ProfileDialog = ({ open, onOpenChange }: ProfileDialogProps) => {
               onClick={handleExportProfile}
               className="flex-1 justify-start gap-3 px-5 py-4"
             >
-              <Download className="h-4 w-4 text-muted-foreground" />
+              <HugeiconsIcon icon={Download01Icon} size={16} strokeWidth={2} className="text-muted-foreground" />
               <div className="text-left">
                 <div className="font-medium">{t("exportProfile")}</div>
               </div>
@@ -143,7 +144,7 @@ export const ProfileDialog = ({ open, onOpenChange }: ProfileDialogProps) => {
               onClick={handleImportClick}
               className="flex-1 justify-start gap-3 px-5 py-4"
             >
-              <Upload className="h-4 w-4 text-muted-foreground" />
+              <HugeiconsIcon icon={Upload01Icon} size={16} strokeWidth={2} className="text-muted-foreground" />
               <div className="text-left">
                 <div className="font-medium">{t("importProfile")}</div>
               </div>

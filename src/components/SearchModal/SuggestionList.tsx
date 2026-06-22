@@ -1,7 +1,6 @@
 "use client";
 
 import { Fragment } from "react";
-import { Search } from "lucide-react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Search01Icon,
@@ -74,12 +73,14 @@ function SuggestionRow({
       )}
     >
       {isLaunchpad ? (
-        <Search
+        <HugeiconsIcon
+          icon={Search01Icon}
+          size={16}
+          strokeWidth={2}
           className={cn(
-            "h-4 w-4 shrink-0",
+            "shrink-0",
             isActive ? "text-sky-300" : "text-white/45",
           )}
-          strokeWidth={2}
         />
       ) : (
         <HugeiconsIcon
@@ -147,17 +148,14 @@ function SearchActionRow({
       onClick={onSelect}
       className={cn(
         "flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors",
-        isActive
-          ? "bg-white/10 text-white"
-          : "text-white/85 hover:bg-white/6",
+        isActive ? "bg-white/10 text-white" : "text-white/85 hover:bg-white/6",
       )}
     >
-      <Search
-        className={cn(
-          "h-4 w-4 shrink-0",
-          isActive ? "text-sky-300" : "text-white/45",
-        )}
+      <HugeiconsIcon
+        icon={Search01Icon}
+        size={16}
         strokeWidth={2}
+        className={cn("shrink-0", isActive ? "text-sky-300" : "text-white/45")}
       />
       <span className="min-w-0 truncate">
         <span className="text-sky-300">{query.trim()}</span>

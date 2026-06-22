@@ -12,7 +12,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Trash2, AlertTriangle } from "lucide-react";
+import { Alert01Icon, Delete02Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/lib/utils";
 
 interface DeleteConfirmDialogProps {
@@ -52,7 +53,7 @@ export function DeleteConfirmDialog({
       >
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-destructive font-bold text-xl tracking-tight">
-            <AlertTriangle className="h-5 w-5" />
+            <HugeiconsIcon icon={Alert01Icon} size={20} strokeWidth={2} />
             {title}
           </DialogTitle>
           <DialogDescription className="text-muted-foreground pt-2">
@@ -63,7 +64,7 @@ export function DeleteConfirmDialog({
         <div className="py-4">
           <div className="rounded-2xl border border-destructive/10 bg-destructive/5 p-4 flex items-start gap-3">
             <div className="p-2 rounded-full bg-destructive/10">
-              <Trash2 className="h-4 w-4 text-destructive" />
+              <HugeiconsIcon icon={Delete02Icon} size={16} strokeWidth={2} className="text-destructive" />
             </div>
             <div>
               <p className="text-sm font-semibold text-destructive/80">

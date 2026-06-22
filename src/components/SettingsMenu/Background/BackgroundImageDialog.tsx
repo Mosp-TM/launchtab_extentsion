@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Upload, X, Image as ImageIcon } from "lucide-react";
+import { Cancel01Icon, Image01Icon, Upload01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { AppImage } from "@/components/ui/AppImage";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -82,7 +83,7 @@ export function BackgroundImageDialog({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <ImageIcon className="h-5 w-5" />
+            <HugeiconsIcon icon={Image01Icon} size={20} strokeWidth={2} />
             Background Image
           </DialogTitle>
           <DialogDescription>
@@ -105,7 +106,7 @@ export function BackgroundImageDialog({
               onClick={() => fileInputRef.current?.click()}
               className="w-full h-12"
             >
-              <Upload className="mr-2 h-4 w-4" />
+              <HugeiconsIcon icon={Upload01Icon} size={16} strokeWidth={2} className="mr-2" />
               {tempBackgroundImage ? "Change Image" : "Upload Image"}
             </Button>
 
@@ -115,7 +116,7 @@ export function BackgroundImageDialog({
                 onClick={handleRemoveImage}
                 className="w-full"
               >
-                <X className="mr-2 h-4 w-4" />
+                <HugeiconsIcon icon={Cancel01Icon} size={16} strokeWidth={2} className="mr-2" />
                 Remove Image
               </Button>
             )}

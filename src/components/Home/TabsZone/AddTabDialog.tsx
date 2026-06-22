@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Add01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Dialog,
   DialogClose,
@@ -78,7 +79,7 @@ export const AddTabDialog = () => {
           size="icon-lg"
           className="rounded-full border-dashed border-primary/60 bg-background text-primary shadow-none hover:border-primary"
         >
-          <Plus className="h-5 w-5" />
+          <HugeiconsIcon icon={Add01Icon} size={20} strokeWidth={2} />
           <span className="sr-only">Add shortcut</span>
         </Button>
       </DialogTrigger>

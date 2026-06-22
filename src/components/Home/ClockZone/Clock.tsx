@@ -10,7 +10,12 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { Clock as ClockIcon, ImageIcon, Maximize2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Clock01Icon,
+  Image01Icon,
+  Maximize01Icon,
+} from "@hugeicons/core-free-icons";
 import "./Clock.css";
 
 interface DigitalClockProps {
@@ -104,74 +109,31 @@ export default function DigitalClock({
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
-        <div className={variant === "launchpad" ? launchpadTextAlign : undefined}>
+        <div
+          className={variant === "launchpad" ? launchpadTextAlign : undefined}
+        >
           <div
             className={cn(
               "clock-style flex cursor-context-menu select-none items-baseline",
               variant === "launchpad"
-                ? cn(launchpadJustify, launchpadTextAlign, "text-5xl md:text-6xl")
+                ? cn(
+                    launchpadJustify,
+                    launchpadTextAlign,
+                    "text-5xl md:text-6xl",
+                  )
                 : "justify-center text-center text-7xl",
               clockStyle === "modern"
-              ? "font-sans clock-style--modern"
-              : clockStyle === "elegant"
-                ? "clock-style--elegant"
-                : clockStyle === "futuristic"
-                  ? "clock-style--futuristic font-sans"
-                  : clockStyle === "retro"
-                    ? "clock-style--retro font-mono"
-                    : "font-mono clock-style--classic",
-          )}
-          style={
-            {
-              fontFamily:
-                clockStyle === "modern"
-                  ? "var(--font-fredoka)"
-                  : clockStyle === "elegant"
-                    ? "var(--font-righteous)"
-                    : clockStyle === "futuristic"
-                      ? "var(--font-orbitron)"
-                      : clockStyle === "retro"
-                        ? "var(--font-vt323)"
-                        : "var(--font-share-tech-mono)",
-              letterSpacing:
-                clockStyle === "modern"
-                  ? "-0.02em"
-                  : clockStyle === "elegant"
-                    ? "0.03em"
-                    : clockStyle === "futuristic"
-                      ? "0.05em"
-                      : clockStyle === "retro"
-                        ? "0.04em"
-                        : "0.02em",
-              color: "var(--clock-color)",
-              textShadow: showClockGlow
-                ? "0 0 10px var(--glow-color), 0 0 20px var(--glow-color)"
-                : "none",
-              animation: showClockGlow
-                ? "glow 2s ease-in-out infinite alternate"
-                : "none",
-              "--clock-color": clockColor,
-              "--glow-color": clockColor,
-              "--clock-glow-strength": showClockGlow ? "1" : "0",
-            } as React.CSSProperties
-          }
-        >
-          <span>{timeData.digits}</span>
-          {timeData.ampm && (
-            <span
-              className={cn(
-                "ml-2 opacity-40 font-medium self-end mb-2",
-                clockStyle === "modern"
-                  ? "text-2xl"
-                  : clockStyle === "elegant"
-                    ? "text-2xl font-sans"
-                    : clockStyle === "futuristic"
-                      ? "text-lg font-sans"
-                      : clockStyle === "retro"
-                        ? "text-2xl font-mono"
-                        : "text-xl font-mono",
-              )}
-              style={{
+                ? "font-sans clock-style--modern"
+                : clockStyle === "elegant"
+                  ? "clock-style--elegant"
+                  : clockStyle === "futuristic"
+                    ? "clock-style--futuristic font-sans"
+                    : clockStyle === "retro"
+                      ? "clock-style--retro font-mono"
+                      : "font-mono clock-style--classic",
+            )}
+            style={
+              {
                 fontFamily:
                   clockStyle === "modern"
                     ? "var(--font-fredoka)"
@@ -182,11 +144,60 @@ export default function DigitalClock({
                         : clockStyle === "retro"
                           ? "var(--font-vt323)"
                           : "var(--font-share-tech-mono)",
-              }}
-            >
-              {timeData.ampm}
-            </span>
-          )}
+                letterSpacing:
+                  clockStyle === "modern"
+                    ? "-0.02em"
+                    : clockStyle === "elegant"
+                      ? "0.03em"
+                      : clockStyle === "futuristic"
+                        ? "0.05em"
+                        : clockStyle === "retro"
+                          ? "0.04em"
+                          : "0.02em",
+                color: "var(--clock-color)",
+                textShadow: showClockGlow
+                  ? "0 0 10px var(--glow-color), 0 0 20px var(--glow-color)"
+                  : "none",
+                animation: showClockGlow
+                  ? "glow 2s ease-in-out infinite alternate"
+                  : "none",
+                "--clock-color": clockColor,
+                "--glow-color": clockColor,
+                "--clock-glow-strength": showClockGlow ? "1" : "0",
+              } as React.CSSProperties
+            }
+          >
+            <span>{timeData.digits}</span>
+            {timeData.ampm && (
+              <span
+                className={cn(
+                  "ml-2 opacity-40 font-medium self-end mb-2",
+                  clockStyle === "modern"
+                    ? "text-2xl"
+                    : clockStyle === "elegant"
+                      ? "text-2xl font-sans"
+                      : clockStyle === "futuristic"
+                        ? "text-lg font-sans"
+                        : clockStyle === "retro"
+                          ? "text-2xl font-mono"
+                          : "text-xl font-mono",
+                )}
+                style={{
+                  fontFamily:
+                    clockStyle === "modern"
+                      ? "var(--font-fredoka)"
+                      : clockStyle === "elegant"
+                        ? "var(--font-righteous)"
+                        : clockStyle === "futuristic"
+                          ? "var(--font-orbitron)"
+                          : clockStyle === "retro"
+                            ? "var(--font-vt323)"
+                            : "var(--font-share-tech-mono)",
+                }}
+              >
+                {timeData.ampm}
+              </span>
+            )}
           </div>
           {variant === "launchpad" && dateLabel && (
             <p className="mt-1 text-sm text-foreground/55 md:text-base">
@@ -204,21 +215,36 @@ export default function DigitalClock({
           onSelect={() => setClockDialogOpen(true)}
           className="gap-2.5 font-bold text-xs rounded-lg"
         >
-          <ClockIcon className="h-3.5 w-3.5 text-primary" />
+          <HugeiconsIcon
+            icon={Clock01Icon}
+            size={14}
+            strokeWidth={2}
+            className="text-primary"
+          />
           {t("clockSettings")}
         </ContextMenuItem>
         <ContextMenuItem
           onSelect={() => setBackgroundDialogOpen(true)}
           className="gap-2.5 font-bold text-xs rounded-lg"
         >
-          <ImageIcon className="h-3.5 w-3.5 text-primary" />
+          <HugeiconsIcon
+            icon={Image01Icon}
+            size={14}
+            strokeWidth={2}
+            className="text-primary"
+          />
           {t("backgroundImage")}
         </ContextMenuItem>
         <ContextMenuItem
           onSelect={() => setResizeDialogOpen(true)}
           className="gap-2.5 font-bold text-xs rounded-lg"
         >
-          <Maximize2 className="h-3.5 w-3.5 text-primary" />
+          <HugeiconsIcon
+            icon={Maximize01Icon}
+            size={14}
+            strokeWidth={2}
+            className="text-primary"
+          />
           {t("resizeShortcuts")}
         </ContextMenuItem>
       </ContextMenuContent>

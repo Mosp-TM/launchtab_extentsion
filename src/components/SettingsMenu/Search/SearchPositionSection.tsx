@@ -1,6 +1,7 @@
 "use client";
 
-import { Search, LayoutTemplate } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { LayoutGridIcon, Search01Icon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
 import { useSettingsStore, SearchEngine } from "@/store/settingsStore";
 import { useTranslation } from "@/constants/languages";
@@ -32,7 +33,7 @@ export const SearchPositionSection = () => {
             setSearchEngine(engines[nextIndex]);
           }}
         >
-          <Search className="h-3.5 w-3.5" />
+          <HugeiconsIcon icon={Search01Icon} size={14} strokeWidth={2} />
           <span className="text-[10px] font-semibold capitalize">
             {searchEngine === "duckduckgo" ? "DDG" : searchEngine}
           </span>
@@ -51,7 +52,7 @@ export const SearchPositionSection = () => {
             setTabsPosition(tabsPosition === "top" ? "center" : "top")
           }
         >
-          <LayoutTemplate className="h-3.5 w-3.5" />
+          <HugeiconsIcon icon={LayoutGridIcon} size={14} strokeWidth={2} />
           <span className="text-[10px] font-semibold capitalize">
             {t(tabsPosition)}
           </span>

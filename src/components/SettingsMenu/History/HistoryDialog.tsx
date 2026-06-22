@@ -1,8 +1,12 @@
 "use client";
 
-import { Delete02Icon } from "@hugeicons/core-free-icons";
+import {
+  Delete02Icon,
+  Globe02Icon,
+  Search01Icon,
+  TimeScheduleIcon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Globe, History, Search } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -80,7 +84,7 @@ export const HistoryDialog = ({ open, onOpenChange }: HistoryDialogProps) => {
       <DialogContent className="w-[calc(100vw-1rem)] max-w-[96vw] p-4 sm:w-[calc(100vw-2rem)] sm:max-w-4xl sm:p-6">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <History className="h-5 w-5" />
+            <HugeiconsIcon icon={TimeScheduleIcon} size={20} strokeWidth={2} />
             {t("history")}
           </DialogTitle>
           <DialogDescription>{t("historyDescription")}</DialogDescription>
@@ -98,9 +102,9 @@ export const HistoryDialog = ({ open, onOpenChange }: HistoryDialogProps) => {
                 >
                   <div className="w-fit rounded-full bg-background p-2 text-muted-foreground shadow-sm">
                     {isSearchEntry ? (
-                      <Search className="h-4 w-4" />
+                      <HugeiconsIcon icon={Search01Icon} size={16} strokeWidth={2} />
                     ) : (
-                      <Globe className="h-4 w-4" />
+                      <HugeiconsIcon icon={Globe02Icon} size={16} strokeWidth={2} />
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
@@ -139,7 +143,7 @@ export const HistoryDialog = ({ open, onOpenChange }: HistoryDialogProps) => {
           </div>
         ) : (
           <div className="flex min-h-44 flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-muted/20 px-6 text-center">
-            <History className="mb-3 h-8 w-8 text-muted-foreground/70" />
+            <HugeiconsIcon icon={TimeScheduleIcon} size={32} strokeWidth={2} className="mb-3 text-muted-foreground/70" />
             <p className="text-sm font-medium text-foreground">
               {t("noHistory")}
             </p>

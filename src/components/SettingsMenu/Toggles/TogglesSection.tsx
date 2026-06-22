@@ -1,6 +1,7 @@
 "use client";
 
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowDown01Icon, ArrowUp01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/store/settingsStore";
@@ -128,9 +129,9 @@ export const TogglesSection = ({
       >
         {t("moreSettings")}
         {showMore ? (
-          <ChevronUp className="h-3 w-3" />
+          <HugeiconsIcon icon={ArrowUp01Icon} size={12} strokeWidth={2} />
         ) : (
-          <ChevronDown className="h-3 w-3" />
+          <HugeiconsIcon icon={ArrowDown01Icon} size={12} strokeWidth={2} />
         )}
       </Button>
     </div>

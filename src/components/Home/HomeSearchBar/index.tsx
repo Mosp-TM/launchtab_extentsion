@@ -8,7 +8,8 @@ import {
   useRef,
   useState,
 } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useSettingsStore } from "@/store/settingsStore";
@@ -315,8 +316,7 @@ export const HomeSearchBar = forwardRef<
             ? "rounded-2xl border border-sky-400/35 bg-[#1c1c1e]/88 shadow-2xl shadow-black/30 backdrop-blur-xl"
             : cn(
                 "transition-all duration-200 rounded-2xl border border-white/20 bg-background/55 shadow-2xl shadow-black/10 backdrop-blur-xl",
-                isFocused &&
-                  "border-white/30 bg-background/65 shadow-black/20",
+                isFocused && "border-white/30 bg-background/65 shadow-black/20",
               ),
         )}
       >
@@ -372,7 +372,7 @@ export const HomeSearchBar = forwardRef<
             )}
             disabled={!query.trim()}
           >
-            <ArrowRight className="h-4 w-4" strokeWidth={2} />
+            <HugeiconsIcon icon={ArrowRight01Icon} size={16} strokeWidth={2} />
           </Button>
         </div>
 

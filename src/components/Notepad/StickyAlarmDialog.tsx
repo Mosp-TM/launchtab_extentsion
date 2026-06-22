@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BellRing } from "lucide-react";
+import { Notification01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Dialog,
   DialogContent,
@@ -215,7 +216,7 @@ export default function StickyAlarmDialog() {
         >
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <BellRing className="h-5 w-5 text-primary" />
+              <HugeiconsIcon icon={Notification01Icon} size={20} strokeWidth={2} className="text-primary" />
               {t("stickyAlarmTitle")}
             </DialogTitle>
             <DialogDescription>

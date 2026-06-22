@@ -1,6 +1,7 @@
 "use client";
 
-import { X } from "lucide-react";
+import { Cancel01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/lib/utils";
 import Notepad from "@/components/Notepad";
 import { Button } from "@/components/ui/button";
@@ -41,7 +42,7 @@ export function SidebarOverlay({
             onClick={onMouseLeave}
             aria-label="Close tasks panel"
           >
-            <X className="h-4 w-4" />
+            <HugeiconsIcon icon={Cancel01Icon} size={16} strokeWidth={2} />
           </Button>
         </div>
         <div className="min-h-0 flex-1 overflow-hidden">
