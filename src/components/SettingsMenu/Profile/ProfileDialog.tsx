@@ -1,7 +1,11 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Download01Icon, Upload01Icon, UserIcon } from "@hugeicons/core-free-icons";
+import {
+  Download01Icon,
+  Upload01Icon,
+  UserIcon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Dialog,
@@ -133,7 +137,12 @@ export const ProfileDialog = ({ open, onOpenChange }: ProfileDialogProps) => {
               onClick={handleExportProfile}
               className="flex-1 justify-start gap-3 px-5 py-4"
             >
-              <HugeiconsIcon icon={Download01Icon} size={16} strokeWidth={2} className="text-muted-foreground" />
+              <HugeiconsIcon
+                icon={Download01Icon}
+                size={16}
+                strokeWidth={2}
+                className="text-muted-foreground"
+              />
               <div className="text-left">
                 <div className="font-medium">{t("exportProfile")}</div>
               </div>
@@ -144,7 +153,12 @@ export const ProfileDialog = ({ open, onOpenChange }: ProfileDialogProps) => {
               onClick={handleImportClick}
               className="flex-1 justify-start gap-3 px-5 py-4"
             >
-              <HugeiconsIcon icon={Upload01Icon} size={16} strokeWidth={2} className="text-muted-foreground" />
+              <HugeiconsIcon
+                icon={Upload01Icon}
+                size={16}
+                strokeWidth={2}
+                className="text-muted-foreground"
+              />
               <div className="text-left">
                 <div className="font-medium">{t("importProfile")}</div>
               </div>

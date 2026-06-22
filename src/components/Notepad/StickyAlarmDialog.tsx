@@ -216,7 +216,12 @@ export default function StickyAlarmDialog() {
         >
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <HugeiconsIcon icon={Notification01Icon} size={20} strokeWidth={2} className="text-primary" />
+              <HugeiconsIcon
+                icon={Notification01Icon}
+                size={20}
+                strokeWidth={2}
+                className="text-primary"
+              />
               {t("stickyAlarmTitle")}
             </DialogTitle>
             <DialogDescription>

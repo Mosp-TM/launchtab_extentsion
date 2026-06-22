@@ -102,9 +102,17 @@ export const HistoryDialog = ({ open, onOpenChange }: HistoryDialogProps) => {
                 >
                   <div className="w-fit rounded-full bg-background p-2 text-muted-foreground shadow-sm">
                     {isSearchEntry ? (
-                      <HugeiconsIcon icon={Search01Icon} size={16} strokeWidth={2} />
+                      <HugeiconsIcon
+                        icon={Search01Icon}
+                        size={16}
+                        strokeWidth={2}
+                      />
                     ) : (
-                      <HugeiconsIcon icon={Globe02Icon} size={16} strokeWidth={2} />
+                      <HugeiconsIcon
+                        icon={Globe02Icon}
+                        size={16}
+                        strokeWidth={2}
+                      />
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
@@ -143,7 +151,12 @@ export const HistoryDialog = ({ open, onOpenChange }: HistoryDialogProps) => {
           </div>
         ) : (
           <div className="flex min-h-44 flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-muted/20 px-6 text-center">
-            <HugeiconsIcon icon={TimeScheduleIcon} size={32} strokeWidth={2} className="mb-3 text-muted-foreground/70" />
+            <HugeiconsIcon
+              icon={TimeScheduleIcon}
+              size={32}
+              strokeWidth={2}
+              className="mb-3 text-muted-foreground/70"
+            />
             <p className="text-sm font-medium text-foreground">
               {t("noHistory")}
             </p>

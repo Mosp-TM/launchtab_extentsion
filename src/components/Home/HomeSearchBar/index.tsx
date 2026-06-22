@@ -90,22 +90,32 @@ export const HomeSearchBar = forwardRef<
     const focusInput = () => {
       const el = inputRef.current;
       if (!el) return;
+      if (document.activeElement === el) return;
       el.focus({ preventScroll: true });
       el.setSelectionRange(el.value.length, el.value.length);
     };
 
     focusInput();
     const rafId = requestAnimationFrame(focusInput);
-    const timeoutIds = [50, 150, 350].map((delay) =>
+    const timeoutIds = [50, 150, 350, 600, 1000, 1500, 2500].map((delay) =>
       window.setTimeout(focusInput, delay),
     );
 
-    window.addEventListener("focus", focusInput);
+    const handlePageFocus = () => focusInput();
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") focusInput();
+    };
+
+    window.addEventListener("focus", handlePageFocus);
+    window.addEventListener("pageshow", handlePageFocus);
+    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
       cancelAnimationFrame(rafId);
       timeoutIds.forEach((id) => window.clearTimeout(id));
-      window.removeEventListener("focus", focusInput);
+      window.removeEventListener("focus", handlePageFocus);
+      window.removeEventListener("pageshow", handlePageFocus);
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, [autoFocus]);
 
@@ -333,6 +343,7 @@ export const HomeSearchBar = forwardRef<
 
           <Input
             ref={inputRef}
+            autoFocus={autoFocus}
             placeholder={placeholder}
             value={isHistoryComplete ? inlineValue! : query}
             onChange={(e) => {

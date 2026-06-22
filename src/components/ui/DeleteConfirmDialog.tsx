@@ -64,7 +64,12 @@ export function DeleteConfirmDialog({
         <div className="py-4">
           <div className="rounded-2xl border border-destructive/10 bg-destructive/5 p-4 flex items-start gap-3">
             <div className="p-2 rounded-full bg-destructive/10">
-              <HugeiconsIcon icon={Delete02Icon} size={16} strokeWidth={2} className="text-destructive" />
+              <HugeiconsIcon
+                icon={Delete02Icon}
+                size={16}
+                strokeWidth={2}
+                className="text-destructive"
+              />
             </div>
             <div>
               <p className="text-sm font-semibold text-destructive/80">

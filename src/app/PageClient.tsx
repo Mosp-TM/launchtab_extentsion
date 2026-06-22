@@ -150,6 +150,19 @@ export function PageClient() {
   useDefaultAssets();
   useStickyNoteAlarms();
 
+  useEffect(() => {
+    if (!autoFocusSearch) return;
+
+    const focusSearch = () => searchRef.current?.focus();
+    focusSearch();
+
+    const timeoutIds = [100, 400, 900, 1800].map((delay) =>
+      window.setTimeout(focusSearch, delay),
+    );
+
+    return () => timeoutIds.forEach((id) => window.clearTimeout(id));
+  }, [autoFocusSearch, isHydrated]);
+
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
       <BackgroundLayer url={backgroundImageUrl} opacity={bgOpacity} />
@@ -170,7 +183,7 @@ export function PageClient() {
             ref={searchRef}
             variant="launchpad"
             className="w-full"
-            autoFocus={isHydrated && autoFocusSearch}
+            autoFocus={autoFocusSearch}
             onSuggestionsChange={setIsSearchSuggestionsOpen}
           />
 

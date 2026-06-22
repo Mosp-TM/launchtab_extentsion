@@ -1,7 +1,11 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Cancel01Icon, Image01Icon, Upload01Icon } from "@hugeicons/core-free-icons";
+import {
+  Cancel01Icon,
+  Image01Icon,
+  Upload01Icon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AppImage } from "@/components/ui/AppImage";
 import { Button } from "@/components/ui/button";
@@ -106,7 +110,12 @@ export function BackgroundImageDialog({
               onClick={() => fileInputRef.current?.click()}
               className="w-full h-12"
             >
-              <HugeiconsIcon icon={Upload01Icon} size={16} strokeWidth={2} className="mr-2" />
+              <HugeiconsIcon
+                icon={Upload01Icon}
+                size={16}
+                strokeWidth={2}
+                className="mr-2"
+              />
               {tempBackgroundImage ? "Change Image" : "Upload Image"}
             </Button>
 
@@ -116,7 +125,12 @@ export function BackgroundImageDialog({
                 onClick={handleRemoveImage}
                 className="w-full"
               >
-                <HugeiconsIcon icon={Cancel01Icon} size={16} strokeWidth={2} className="mr-2" />
+                <HugeiconsIcon
+                  icon={Cancel01Icon}
+                  size={16}
+                  strokeWidth={2}
+                  className="mr-2"
+                />
                 Remove Image
               </Button>
             )}

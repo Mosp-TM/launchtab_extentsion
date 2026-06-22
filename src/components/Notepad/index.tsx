@@ -177,7 +177,12 @@ const Notepad = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="rounded-md border border-primary/15 bg-primary/10 p-1.5">
-              <HugeiconsIcon icon={File01Icon} size={16} strokeWidth={2} className="text-primary" />
+              <HugeiconsIcon
+                icon={File01Icon}
+                size={16}
+                strokeWidth={2}
+                className="text-primary"
+              />
             </div>
             <h1 className="text-sm font-bold uppercase tracking-tight text-foreground/90">
               {t("stickyNotes")}
@@ -205,7 +210,11 @@ const Notepad = () => {
                   onClick={() => selectNote(null)}
                   className="h-8 gap-2 -ml-2 text-muted-foreground hover:text-foreground"
                 >
-                  <HugeiconsIcon icon={ArrowLeft01Icon} size={16} strokeWidth={2} />
+                  <HugeiconsIcon
+                    icon={ArrowLeft01Icon}
+                    size={16}
+                    strokeWidth={2}
+                  />
                   {t("back")}
                 </Button>
                 <div className="flex gap-1">
@@ -217,9 +226,18 @@ const Notepad = () => {
                     aria-label={copied ? "Copied" : "Copy note"}
                   >
                     {copied ? (
-                      <HugeiconsIcon icon={CheckmarkCircle01Icon} size={16} strokeWidth={2} className="text-green-500" />
+                      <HugeiconsIcon
+                        icon={CheckmarkCircle01Icon}
+                        size={16}
+                        strokeWidth={2}
+                        className="text-green-500"
+                      />
                     ) : (
-                      <HugeiconsIcon icon={Copy01Icon} size={14} strokeWidth={2} />
+                      <HugeiconsIcon
+                        icon={Copy01Icon}
+                        size={14}
+                        strokeWidth={2}
+                      />
                     )}
                   </Button>
                   <DeleteConfirmDialog
@@ -233,7 +251,11 @@ const Notepad = () => {
                       className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10 transition-colors"
                       aria-label={t("deleteStickyNoteTitle")}
                     >
-                      <HugeiconsIcon icon={Delete02Icon} size={14} strokeWidth={2} />
+                      <HugeiconsIcon
+                        icon={Delete02Icon}
+                        size={14}
+                        strokeWidth={2}
+                      />
                     </Button>
                   </DeleteConfirmDialog>
                 </div>
@@ -262,19 +284,31 @@ const Notepad = () => {
               <div className="space-y-3 rounded-xl border border-border/60 bg-card/50 p-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    <HugeiconsIcon icon={Notification01Icon} size={14} strokeWidth={2} />
+                    <HugeiconsIcon
+                      icon={Notification01Icon}
+                      size={14}
+                      strokeWidth={2}
+                    />
                     {t("setReminder")}
                   </div>
                   {selectedNote.alarmStatus === "scheduled" && (
                     <span className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
-                      <HugeiconsIcon icon={Notification01Icon} size={12} strokeWidth={2} />
+                      <HugeiconsIcon
+                        icon={Notification01Icon}
+                        size={12}
+                        strokeWidth={2}
+                      />
                       {t("scheduled")}:{" "}
                       {formatAlarmCountdown(selectedNote.alarmDueAt)}
                     </span>
                   )}
                   {selectedNote.alarmStatus === "overdue" && (
                     <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold text-amber-600 dark:text-amber-300">
-                      <HugeiconsIcon icon={Notification01Icon} size={12} strokeWidth={2} />
+                      <HugeiconsIcon
+                        icon={Notification01Icon}
+                        size={12}
+                        strokeWidth={2}
+                      />
                       {t("overdue")}
                     </span>
                   )}
@@ -324,7 +358,11 @@ const Notepad = () => {
                     className="h-8"
                     onClick={handleSetReminder}
                   >
-                    <HugeiconsIcon icon={Notification01Icon} size={14} strokeWidth={2} />
+                    <HugeiconsIcon
+                      icon={Notification01Icon}
+                      size={14}
+                      strokeWidth={2}
+                    />
                     {t("setReminder")}
                   </Button>
                   <Button
@@ -334,7 +372,11 @@ const Notepad = () => {
                     className="h-8"
                     onClick={() => clearNoteAlarm(selectedNote.id)}
                   >
-                    <HugeiconsIcon icon={NotificationOff01Icon} size={14} strokeWidth={2} />
+                    <HugeiconsIcon
+                      icon={NotificationOff01Icon}
+                      size={14}
+                      strokeWidth={2}
+                    />
                     {t("clearReminder")}
                   </Button>
                 </div>
@@ -371,7 +413,11 @@ const Notepad = () => {
 
               <div className="relative">
                 <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/50">
-                  <HugeiconsIcon icon={Search01Icon} size={14} strokeWidth={2} />
+                  <HugeiconsIcon
+                    icon={Search01Icon}
+                    size={14}
+                    strokeWidth={2}
+                  />
                 </span>
                 <Input
                   placeholder={t("searchStickyNotes")}
@@ -406,7 +452,11 @@ const Notepad = () => {
                                   : "border border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-300"
                               }`}
                             >
-                              <HugeiconsIcon icon={Notification01Icon} size={10} strokeWidth={2} />
+                              <HugeiconsIcon
+                                icon={Notification01Icon}
+                                size={10}
+                                strokeWidth={2}
+                              />
                               {note.alarmStatus === "scheduled"
                                 ? `${t("scheduled")} • ${formatAlarmCountdown(note.alarmDueAt)}`
                                 : t("overdue")}
@@ -425,7 +475,11 @@ const Notepad = () => {
                             aria-label={t("deleteStickyNoteTitle")}
                             className="absolute right-2 top-2 h-7 w-7 opacity-0 group-hover:opacity-100 hover:text-destructive hover:bg-destructive/10 transition-all rounded-full"
                           >
-                            <HugeiconsIcon icon={Delete02Icon} size={14} strokeWidth={2} />
+                            <HugeiconsIcon
+                              icon={Delete02Icon}
+                              size={14}
+                              strokeWidth={2}
+                            />
                           </Button>
                         </DeleteConfirmDialog>
                       </div>
@@ -433,7 +487,11 @@ const Notepad = () => {
                         {note.content || t("noStickyContent")}
                       </p>
                       <div className="mt-1 flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-muted-foreground/85">
-                        <HugeiconsIcon icon={Clock01Icon} size={10} strokeWidth={2} />
+                        <HugeiconsIcon
+                          icon={Clock01Icon}
+                          size={10}
+                          strokeWidth={2}
+                        />
                         {formatRelativeTime(note.updatedAt)}
                       </div>
                     </div>

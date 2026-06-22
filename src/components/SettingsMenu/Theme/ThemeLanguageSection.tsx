@@ -3,7 +3,6 @@
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ColorsIcon,
-  ComputerIcon,
   LanguageCircleIcon,
   Moon01Icon,
   Sun01Icon,
