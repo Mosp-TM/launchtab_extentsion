@@ -42,6 +42,7 @@ export function PageClient() {
   const { url: backgroundImageUrl } = useMediaUrl(backgroundImage);
   const [bgOpacity, setBgOpacity] = useState(0);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [isSearchSuggestionsOpen, setIsSearchSuggestionsOpen] = useState(false);
 
   const searchRef = useRef<HomeSearchBarHandle>(null);
   const hasPickedDynamicWallpaperRef = useRef(false);
@@ -162,13 +163,18 @@ export function PageClient() {
             variant="launchpad"
             className="w-full"
             autoFocus={isHydrated && autoFocusSearch}
+            onSuggestionsChange={setIsSearchSuggestionsOpen}
           />
 
-          <div className="mt-8 w-full">
-            <TabsZone />
-          </div>
+          {!isSearchSuggestionsOpen && (
+            <>
+              <div className="mt-8 w-full">
+                <TabsZone />
+              </div>
 
-          <RecentTabs className="mt-10" />
+              <RecentTabs className="mt-10" />
+            </>
+          )}
         </main>
       </div>
 

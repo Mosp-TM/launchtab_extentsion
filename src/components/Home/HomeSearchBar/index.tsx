@@ -31,6 +31,7 @@ interface HomeSearchBarProps {
   className?: string;
   autoFocus?: boolean;
   variant?: "default" | "launchpad";
+  onSuggestionsChange?: (show: boolean) => void;
 }
 
 function SearchEngineMark({ engine }: { engine: string }) {
@@ -84,7 +85,7 @@ export const HomeSearchBar = forwardRef<
   HomeSearchBarHandle,
   HomeSearchBarProps
 >(function HomeSearchBar(
-  { className, autoFocus = false, variant = "launchpad" },
+  { className, autoFocus = false, variant = "launchpad", onSuggestionsChange },
   ref,
 ) {
   const isLaunchpad = variant === "launchpad";
@@ -342,6 +343,11 @@ export const HomeSearchBar = forwardRef<
   const showSuggestions = isLaunchpad
     ? hasQuery
     : (isFocused || hasQuery) && allItems.length > 0;
+
+  useEffect(() => {
+    onSuggestionsChange?.(showSuggestions);
+    return () => onSuggestionsChange?.(false);
+  }, [showSuggestions, onSuggestionsChange]);
 
   const placeholder = isLaunchpad
     ? `Search with ${providerLabel} or enter address`
