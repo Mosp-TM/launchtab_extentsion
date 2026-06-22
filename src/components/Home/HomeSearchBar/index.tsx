@@ -343,8 +343,6 @@ export const HomeSearchBar = forwardRef<
     ? hasQuery
     : (isFocused || hasQuery) && allItems.length > 0;
 
-  const isExpanded = isLaunchpad ? hasQuery : isFocused || showSuggestions;
-
   const placeholder = isLaunchpad
     ? `Search with ${providerLabel} or enter address`
     : `${t("search")} ${providerLabel} or enter a URL...`;
@@ -353,13 +351,11 @@ export const HomeSearchBar = forwardRef<
     <section className={cn("w-full", className)} aria-label="Search">
       <div
         className={cn(
-          "relative overflow-hidden transition-all duration-200",
+          "relative overflow-hidden",
           isLaunchpad
-            ? isExpanded
-              ? "rounded-2xl border border-sky-400/35 bg-[#1c1c1e]/88 shadow-2xl shadow-black/30 backdrop-blur-xl"
-              : "rounded-full border border-white/20 bg-white shadow-xl shadow-black/15"
+            ? "rounded-2xl border border-sky-400/35 bg-[#1c1c1e]/88 shadow-2xl shadow-black/30 backdrop-blur-xl"
             : cn(
-                "rounded-2xl border border-white/20 bg-background/55 shadow-2xl shadow-black/10 backdrop-blur-xl",
+                "transition-all duration-200 rounded-2xl border border-white/20 bg-background/55 shadow-2xl shadow-black/10 backdrop-blur-xl",
                 isFocused &&
                   "border-white/30 bg-background/65 shadow-black/20",
               ),
@@ -367,12 +363,7 @@ export const HomeSearchBar = forwardRef<
       >
         <div className="relative flex items-center">
           {isLaunchpad && (
-            <div
-              className={cn(
-                "flex shrink-0 items-center gap-0.5 pl-4",
-                isExpanded ? "text-white/70" : "text-neutral-500",
-              )}
-            >
+            <div className="flex shrink-0 items-center gap-0.5 pl-4 text-white/70">
               <SearchEngineMark engine={searchEngine} />
               <ChevronDown className="h-3.5 w-3.5 opacity-50" aria-hidden />
             </div>
@@ -409,12 +400,7 @@ export const HomeSearchBar = forwardRef<
             className={cn(
               "relative border-0 bg-transparent shadow-none focus-visible:ring-0",
               isLaunchpad
-                ? cn(
-                    "h-12 flex-1 rounded-none pr-12 text-base",
-                    isExpanded
-                      ? "pl-3 text-white placeholder:text-white/45"
-                      : "pl-3 text-neutral-800 placeholder:text-neutral-400",
-                  )
+                ? "h-12 flex-1 rounded-none pl-3 pr-12 text-base text-white placeholder:text-white/45"
                 : "h-14 rounded-2xl pl-14 pr-16 text-base md:h-16 md:text-lg",
             )}
           />
@@ -429,12 +415,7 @@ export const HomeSearchBar = forwardRef<
             className={cn(
               "absolute right-2 top-1/2 -translate-y-1/2 p-0 shadow-none",
               isLaunchpad
-                ? cn(
-                    "h-8 w-8 rounded-full border-0 bg-transparent",
-                    isExpanded
-                      ? "text-white/70 hover:bg-white/10 hover:text-white"
-                      : "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800",
-                  )
+                ? "h-8 w-8 rounded-full border-0 bg-transparent text-white/70 hover:bg-white/10 hover:text-white"
                 : "h-10 w-10 rounded-xl border border-border/40 bg-background/80 text-muted-foreground hover:text-foreground",
             )}
             disabled={!query.trim()}
@@ -445,12 +426,7 @@ export const HomeSearchBar = forwardRef<
 
         {showSuggestions && (
           <>
-            <div
-              className={cn(
-                "mx-4 h-px",
-                isExpanded ? "bg-white/10" : "bg-neutral-200",
-              )}
-            />
+            <div className="mx-4 h-px bg-white/10" />
             <SuggestionList
               items={allItems}
               localCount={localCount}
