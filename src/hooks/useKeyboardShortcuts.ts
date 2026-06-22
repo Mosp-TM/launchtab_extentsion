@@ -8,7 +8,6 @@ import {
   isReservedShortcut,
   isTypingTriggerEvent,
 } from "@/lib/keyboardShortcuts";
-import { trackVisit } from "@/lib/analyticsClient";
 
 interface UseKeyboardShortcutsProps {
   onSearchModalOpen?: (initialQuery?: string) => void;
@@ -90,12 +89,6 @@ export const useKeyboardShortcuts = ({
           url: tab.url,
         });
         incrementVisitCount(tab.id);
-        trackVisit({
-          tabId: tab.id,
-          title: tab.title,
-          url: tab.url,
-          source: "keyboard-shortcut",
-        });
 
         if (tab.openInNewWindow) {
           window.open(tab.url, "_blank", "noopener,noreferrer");

@@ -6,6 +6,3 @@ export function faviconUrl(origin: string): string {
     return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(origin)}&sz=64`;
   }
 }
-
-export const isExtensionRuntime =
-  typeof chrome !== "undefined" && Boolean(chrome.runtime?.id);

@@ -10,7 +10,7 @@ import {
   Maximize2,
   Search,
 } from "lucide-react";
-import { faviconUrl } from "@/lib/apiBase";
+import { faviconUrl } from "@/lib/favicon";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useTabsStore, Tab } from "@/store/tabsStore";
@@ -18,7 +18,6 @@ import { useTabClickHistoryStore } from "@/store/tabClickHistoryStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { useTranslation } from "@/constants/languages";
 import { cn } from "@/lib/utils";
-import { trackVisit } from "@/lib/analyticsClient";
 import { Card } from "@/components/ui/card";
 import { AddTabDialog } from "./AddTabDialog";
 import { EditTabDialog } from "./EditTabDialog";
@@ -78,8 +77,6 @@ interface SortableShortcutCardProps {
   removeTab: (id: string) => void;
   incrementVisitCount: (id: string) => void;
   autoOrderTabs: boolean;
-  cardSize: number;
-  cardRadius: number;
 }
 
 const SortableShortcutCard = ({
@@ -89,8 +86,6 @@ const SortableShortcutCard = ({
   removeTab,
   incrementVisitCount,
   autoOrderTabs,
-  cardSize,
-  cardRadius,
 }: SortableShortcutCardProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const {
@@ -151,12 +146,6 @@ const SortableShortcutCard = ({
       url: tab.url,
     });
     incrementVisitCount(tab.id);
-    trackVisit({
-      tabId: tab.id,
-      title: tab.title,
-      url: tab.url,
-      source: "shortcut-card",
-    });
   };
 
   return (
@@ -437,8 +426,6 @@ export const TabsList = () => {
                     removeTab={removeTab}
                     incrementVisitCount={incrementVisitCount}
                     autoOrderTabs={autoOrderTabs}
-                    cardSize={cardSize}
-                    cardRadius={cardRadius}
                   />
                 </div>
               ))}

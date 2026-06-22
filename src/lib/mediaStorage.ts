@@ -28,36 +28,29 @@ class MediaStorage {
   async storeMedia(id: string, file: File): Promise<string> {
     if (!this.db) await this.init();
 
-    try {
-      // First, read the file data
-      const fileData = await this.readFileAsDataURL(file);
+    const fileData = await this.readFileAsDataURL(file);
 
-      return new Promise((resolve, reject) => {
-        const transaction = this.db!.transaction(["media"], "readwrite");
-        const store = transaction.objectStore("media");
+    return new Promise((resolve, reject) => {
+      const transaction = this.db!.transaction(["media"], "readwrite");
+      const store = transaction.objectStore("media");
 
-        const mediaData = {
-          id,
-          data: fileData,
-          type: file.type,
-          size: file.size,
-          name: file.name,
-          timestamp: Date.now(),
-        };
+      const mediaData = {
+        id,
+        data: fileData,
+        type: file.type,
+        size: file.size,
+        name: file.name,
+        timestamp: Date.now(),
+      };
 
-        const request = store.put(mediaData);
-        request.onsuccess = () => resolve(`media://${id}`);
-        request.onerror = () => reject(request.error);
+      const request = store.put(mediaData);
+      request.onsuccess = () => resolve(`media://${id}`);
+      request.onerror = () => reject(request.error);
 
-        // Handle transaction errors
-        transaction.onerror = () => reject(transaction.error);
-        transaction.onabort = () =>
-          reject(new Error("Transaction was aborted"));
-      });
-    } catch (error) {
-      // console.error('Error storing media:', error);
-      throw error;
-    }
+      // Handle transaction errors
+      transaction.onerror = () => reject(transaction.error);
+      transaction.onabort = () => reject(new Error("Transaction was aborted"));
+    });
   }
 
   private readFileAsDataURL(file: File): Promise<string> {

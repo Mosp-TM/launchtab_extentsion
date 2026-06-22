@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/dialog";
 import { useSettingsStore } from "@/store/settingsStore";
 import { useTranslation } from "@/constants/languages";
-import { cn } from "@/lib/utils";
 
 import { AppearanceSection } from "./sections/AppearanceSection";
 import { WallpaperSection } from "./sections/WallpaperSection";

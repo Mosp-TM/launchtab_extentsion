@@ -15,7 +15,6 @@ import { useTranslation } from "@/constants/languages";
 import { useSearchHistoryStore } from "@/store/searchHistoryStore";
 import { useTabsStore } from "@/store/tabsStore";
 import { useTabClickHistoryStore } from "@/store/tabClickHistoryStore";
-import { trackSearch, trackVisit } from "@/lib/analyticsClient";
 import { isUrl } from "./utils";
 import { useSuggestions } from "./useSuggestions";
 import { SuggestionList } from "./SuggestionList";
@@ -141,7 +140,6 @@ const SearchModal = ({
           ? trimmed
           : `https://${trimmed}`;
     } else {
-      trackSearch(trimmed, searchEngine);
       window.location.href = getSearchUrl(trimmed);
     }
   };
@@ -158,12 +156,6 @@ const SearchModal = ({
           url: matchingTab.url,
         });
         incrementVisitCount(matchingTab.id);
-        trackVisit({
-          tabId: matchingTab.id,
-          title: matchingTab.title,
-          url: matchingTab.url,
-          source: "search-suggestion",
-        });
       }
       if (item.openInNewWindow) {
         window.open(item.value, "_blank", "noopener,noreferrer");
