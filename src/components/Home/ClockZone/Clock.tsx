@@ -31,6 +31,7 @@ export default function DigitalClock({
     clockFormat,
     showSeconds,
     clockStyle,
+    clockPosition,
     language,
     setClockDialogOpen,
     setBackgroundDialogOpen,
@@ -86,15 +87,29 @@ export default function DigitalClock({
     return () => clearInterval(interval);
   }, [clockFormat, showSeconds, variant]);
 
+  const launchpadTextAlign =
+    clockPosition === "top-center"
+      ? "text-center"
+      : clockPosition === "top-right"
+        ? "text-right"
+        : "text-left";
+
+  const launchpadJustify =
+    clockPosition === "top-center"
+      ? "justify-center"
+      : clockPosition === "top-right"
+        ? "justify-end"
+        : "justify-start";
+
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
-        <div className={variant === "launchpad" ? "text-left" : undefined}>
+        <div className={variant === "launchpad" ? launchpadTextAlign : undefined}>
           <div
             className={cn(
               "clock-style flex cursor-context-menu select-none items-baseline",
               variant === "launchpad"
-                ? "justify-start text-left text-5xl md:text-6xl"
+                ? cn(launchpadJustify, launchpadTextAlign, "text-5xl md:text-6xl")
                 : "justify-center text-center text-7xl",
               clockStyle === "modern"
               ? "font-sans clock-style--modern"

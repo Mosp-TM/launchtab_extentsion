@@ -20,7 +20,7 @@ import { useDefaultAssets } from "@/hooks/useDefaultAssets";
 import { useStickyNoteAlarms } from "@/hooks/useStickyNoteAlarms";
 import { useTheme } from "next-themes";
 import { BackgroundLayer } from "./_components/BackgroundLayer";
-import { ClockSection } from "./_components/ClockSection";
+import { ClockSection, CLOCK_HEADER_POSITION } from "./_components/ClockSection";
 import { SidebarOverlay } from "./_components/SidebarOverlay";
 
 export function PageClient() {
@@ -30,6 +30,7 @@ export function PageClient() {
     backgroundImage,
     isHydrated,
     layoutPreset,
+    clockPosition,
     isDynamicWallpaper,
     dynamicWallpapers,
     dynamicWallpaperMode,
@@ -151,8 +152,12 @@ export function PageClient() {
       <BackgroundLayer url={backgroundImageUrl} opacity={bgOpacity} />
 
       {showClock && (
-        <header className="absolute left-0 top-0 z-20 p-5 md:p-8">
-          <ClockSection variant="launchpad" layoutPreset={layoutPreset} />
+        <header className={CLOCK_HEADER_POSITION[clockPosition]}>
+          <ClockSection
+            variant="launchpad"
+            layoutPreset={layoutPreset}
+            clockPosition={clockPosition}
+          />
         </header>
       )}
 
