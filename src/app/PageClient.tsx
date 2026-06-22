@@ -7,7 +7,7 @@ import {
   HomeSearchBar,
   type HomeSearchBarHandle,
 } from "@/components/Home/HomeSearchBar";
-import AISidebar from "@/components/AISidebar";
+import { RecentTabs } from "@/components/Home/RecentTabs";
 import StickyAlarmDialog from "@/components/Notepad/StickyAlarmDialog";
 import GithubLink from "@/components/Home/GithubLink";
 import {
@@ -42,16 +42,10 @@ export function PageClient() {
   const { url: backgroundImageUrl } = useMediaUrl(backgroundImage);
   const [bgOpacity, setBgOpacity] = useState(0);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-  const [isAISidebarOpen, setIsAISidebarOpen] = useState(false);
 
   const searchRef = useRef<HomeSearchBarHandle>(null);
-  const isAISidebarOpenRef = useRef(false);
   const hasPickedDynamicWallpaperRef = useRef(false);
   const lastDynamicWallpaperThemeRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    isAISidebarOpenRef.current = isAISidebarOpen;
-  }, [isAISidebarOpen]);
 
   useEffect(() => {
     if (backgroundImageUrl) {
@@ -144,12 +138,7 @@ export function PageClient() {
 
   useKeyboardShortcuts({
     onSearchFocus: (initialQuery) => {
-      if (isAISidebarOpenRef.current) return;
       searchRef.current?.focus(initialQuery ?? "");
-    },
-    onAIModalOpen: () => {
-      isAISidebarOpenRef.current = true;
-      setIsAISidebarOpen(true);
     },
   });
 
@@ -160,23 +149,26 @@ export function PageClient() {
     <div className="min-h-screen w-full relative overflow-hidden">
       <BackgroundLayer url={backgroundImageUrl} opacity={bgOpacity} />
 
-      <div className="relative z-10 flex min-h-screen flex-col">
-        <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col items-center px-4 pb-24 pt-[8vh] md:pt-[10vh]">
-          {showClock && (
-            <div className="mb-6 w-full">
-              <ClockSection layoutPreset={layoutPreset} />
-            </div>
-          )}
+      {showClock && (
+        <header className="absolute left-0 top-0 z-20 p-5 md:p-8">
+          <ClockSection variant="launchpad" layoutPreset={layoutPreset} />
+        </header>
+      )}
 
+      <div className="relative z-10 flex min-h-screen flex-col">
+        <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center px-4 pb-20 pt-28 md:pt-32">
           <HomeSearchBar
             ref={searchRef}
-            className="mb-8 w-full max-w-2xl"
+            variant="launchpad"
+            className="w-full"
             autoFocus={isHydrated && autoFocusSearch}
           />
 
-          <div className="flex w-full flex-1 flex-col">
+          <div className="mt-8 w-full">
             <TabsZone />
           </div>
+
+          <RecentTabs className="mt-10" />
         </main>
       </div>
 
@@ -190,14 +182,6 @@ export function PageClient() {
 
       <SettingsMenu />
       <GithubLink />
-
-      <AISidebar
-        open={isAISidebarOpen}
-        onClose={() => {
-          isAISidebarOpenRef.current = false;
-          setIsAISidebarOpen(false);
-        }}
-      />
       <StickyAlarmDialog />
     </div>
   );

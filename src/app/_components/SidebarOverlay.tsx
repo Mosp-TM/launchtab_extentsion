@@ -1,7 +1,9 @@
 "use client";
 
+import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Notepad from "@/components/Notepad";
+import { Button } from "@/components/ui/button";
 
 interface SidebarOverlayProps {
   isVisible: boolean;
@@ -24,12 +26,27 @@ export function SidebarOverlay({
       )}
       <div
         className={cn(
-          "fixed right-0 top-0 bottom-0 w-80 md:w-96 z-50 transform transition-all duration-500 ease-out",
+          "fixed right-0 top-0 bottom-0 z-50 flex w-80 transform flex-col border-l border-white/10 bg-black/40 backdrop-blur-xl transition-all duration-500 ease-out md:w-96",
           isVisible ? "translate-x-0" : "translate-x-full",
         )}
         onMouseLeave={onMouseLeave}
       >
-        <Notepad />
+        <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+          <h2 className="text-sm font-semibold text-foreground/90">Tasks</h2>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 rounded-full text-foreground/60 hover:bg-white/10 hover:text-foreground"
+            onClick={onMouseLeave}
+            aria-label="Close tasks panel"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+        <div className="min-h-0 flex-1 overflow-hidden">
+          <Notepad />
+        </div>
       </div>
     </>
   );

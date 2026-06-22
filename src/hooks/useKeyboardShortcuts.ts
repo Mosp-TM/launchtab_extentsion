@@ -11,12 +11,10 @@ import {
 
 interface UseKeyboardShortcutsProps {
   onSearchFocus?: (initialQuery?: string) => void;
-  onAIModalOpen?: () => void;
 }
 
 export const useKeyboardShortcuts = ({
   onSearchFocus,
-  onAIModalOpen,
 }: UseKeyboardShortcutsProps = {}) => {
   const getTabByShortcut = useTabsStore((state) => state.getTabByShortcut);
   const incrementVisitCount = useTabsStore(
@@ -25,6 +23,7 @@ export const useKeyboardShortcuts = ({
   const addTabClickHistoryEntry = useTabClickHistoryStore(
     (state) => state.addTabClickHistoryEntry,
   );
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement;
@@ -34,7 +33,6 @@ export const useKeyboardShortcuts = ({
         tagName === "textarea" ||
         target.contentEditable === "true";
 
-      const isCmdOrCtrl = event.ctrlKey || event.metaKey;
       const isPlainSlash =
         event.key === "/" &&
         !isInputField &&
@@ -42,15 +40,6 @@ export const useKeyboardShortcuts = ({
         !event.altKey &&
         !event.shiftKey &&
         !event.metaKey;
-      const isComboSlash =
-        event.key === "/" && isCmdOrCtrl && !event.altKey && !event.shiftKey;
-
-      if (isComboSlash) {
-        event.preventDefault();
-        event.stopPropagation();
-        onAIModalOpen?.();
-        return;
-      }
 
       if (isPlainSlash) {
         event.preventDefault();
@@ -107,7 +96,6 @@ export const useKeyboardShortcuts = ({
     addTabClickHistoryEntry,
     getTabByShortcut,
     incrementVisitCount,
-    onAIModalOpen,
     onSearchFocus,
   ]);
 };

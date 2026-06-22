@@ -13,11 +13,18 @@ import {
 import { Clock as ClockIcon, ImageIcon, Maximize2 } from "lucide-react";
 import "./Clock.css";
 
-export default function DigitalClock() {
+interface DigitalClockProps {
+  variant?: "default" | "launchpad";
+}
+
+export default function DigitalClock({
+  variant = "default",
+}: DigitalClockProps) {
   const [timeData, setTimeData] = useState<{ digits: string; ampm: string }>({
     digits: "",
     ampm: "",
   });
+  const [dateLabel, setDateLabel] = useState("");
   const {
     clockColor,
     showClockGlow,
@@ -61,20 +68,35 @@ export default function DigitalClock() {
         }
       }
       setTimeData({ digits, ampm });
+
+      if (variant === "launchpad") {
+        setDateLabel(
+          now.toLocaleDateString(undefined, {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          }),
+        );
+      }
     };
 
     updateTime();
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
-  }, [clockFormat, showSeconds]);
+  }, [clockFormat, showSeconds, variant]);
 
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
-        <div
-          className={cn(
-            "clock-style text-7xl text-center flex items-baseline justify-center cursor-context-menu select-none",
-            clockStyle === "modern"
+        <div className={variant === "launchpad" ? "text-left" : undefined}>
+          <div
+            className={cn(
+              "clock-style flex cursor-context-menu select-none items-baseline",
+              variant === "launchpad"
+                ? "justify-start text-left text-5xl md:text-6xl"
+                : "justify-center text-center text-7xl",
+              clockStyle === "modern"
               ? "font-sans clock-style--modern"
               : clockStyle === "elegant"
                 ? "clock-style--elegant"
@@ -149,6 +171,12 @@ export default function DigitalClock() {
             >
               {timeData.ampm}
             </span>
+          )}
+          </div>
+          {variant === "launchpad" && dateLabel && (
+            <p className="mt-1 text-sm text-foreground/55 md:text-base">
+              {dateLabel}
+            </p>
           )}
         </div>
       </ContextMenuTrigger>

@@ -30,12 +30,17 @@ export type HomeSearchBarHandle = {
 interface HomeSearchBarProps {
   className?: string;
   autoFocus?: boolean;
+  variant?: "default" | "launchpad";
 }
 
 export const HomeSearchBar = forwardRef<
   HomeSearchBarHandle,
   HomeSearchBarProps
->(function HomeSearchBar({ className, autoFocus = false }, ref) {
+>(function HomeSearchBar(
+  { className, autoFocus = false, variant = "launchpad" },
+  ref,
+) {
+  const isLaunchpad = variant === "launchpad";
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isFocused, setIsFocused] = useState(false);
@@ -276,21 +281,34 @@ export const HomeSearchBar = forwardRef<
     <section className={cn("w-full", className)} aria-label="Search">
       <div
         className={cn(
-          "relative rounded-2xl border border-white/20 bg-background/55 shadow-2xl shadow-black/10 backdrop-blur-xl transition-shadow",
-          isFocused && "border-white/30 bg-background/65 shadow-black/20",
+          "relative transition-shadow",
+          isLaunchpad
+            ? "rounded-xl border border-white/12 bg-black/30 shadow-lg shadow-black/20 backdrop-blur-xl"
+            : "rounded-2xl border border-white/20 bg-background/55 shadow-2xl shadow-black/10 backdrop-blur-xl",
+          isFocused &&
+            (isLaunchpad
+              ? "border-white/25 bg-black/40"
+              : "border-white/30 bg-background/65 shadow-black/20"),
         )}
       >
-        <HugeiconsIcon
-          icon={Search01Icon}
-          size={18}
-          strokeWidth={2}
-          className="pointer-events-none absolute left-5 top-1/2 z-10 -translate-y-1/2 text-muted-foreground/80"
-        />
+        {!isLaunchpad && (
+          <HugeiconsIcon
+            icon={Search01Icon}
+            size={18}
+            strokeWidth={2}
+            className="pointer-events-none absolute left-5 top-1/2 z-10 -translate-y-1/2 text-muted-foreground/80"
+          />
+        )}
 
         {inlineSuffix && !isHistoryComplete && (
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 flex h-14 items-center overflow-hidden whitespace-pre rounded-2xl pl-14 pr-16 text-base md:h-16 md:text-lg"
+            className={cn(
+              "pointer-events-none absolute inset-0 flex items-center overflow-hidden whitespace-pre text-base",
+              isLaunchpad
+                ? "h-12 rounded-xl pl-4 pr-12"
+                : "h-14 rounded-2xl pl-14 pr-16 md:h-16 md:text-lg",
+            )}
           >
             <span className="invisible">{query}</span>
             <span className="text-muted-foreground/45">{inlineSuffix}</span>
@@ -299,7 +317,11 @@ export const HomeSearchBar = forwardRef<
 
         <Input
           ref={inputRef}
-          placeholder={`${t("search")} ${providerLabel} or enter a URL...`}
+          placeholder={
+            isLaunchpad
+              ? "Search or Enter address"
+              : `${t("search")} ${providerLabel} or enter a URL...`
+          }
           value={isHistoryComplete ? inlineValue! : query}
           onChange={(e) => {
             if (isHistoryComplete) {
@@ -315,7 +337,12 @@ export const HomeSearchBar = forwardRef<
             window.setTimeout(() => setIsFocused(false), 120);
           }}
           onKeyDown={handleKeyDown}
-          className="relative h-14 rounded-2xl border-0 bg-transparent pl-14 pr-16 text-base shadow-none focus-visible:ring-0 md:h-16 md:text-lg"
+          className={cn(
+            "relative border-0 bg-transparent shadow-none focus-visible:ring-0",
+            isLaunchpad
+              ? "h-12 rounded-xl pl-4 pr-12 text-base text-foreground/90 placeholder:text-foreground/40"
+              : "h-14 rounded-2xl pl-14 pr-16 text-base md:h-16 md:text-lg",
+          )}
         />
 
         <Button
@@ -325,7 +352,12 @@ export const HomeSearchBar = forwardRef<
             handleSearchValue(isHistoryComplete ? inlineValue! : query)
           }
           aria-label={`Search with ${providerLabel}`}
-          className="absolute right-3 top-1/2 h-10 w-10 -translate-y-1/2 rounded-xl border border-border/40 bg-background/80 p-0 text-muted-foreground shadow-none hover:bg-accent hover:text-foreground"
+          className={cn(
+            "absolute right-2 top-1/2 -translate-y-1/2 p-0 text-muted-foreground shadow-none hover:bg-white/10 hover:text-foreground",
+            isLaunchpad
+              ? "h-8 w-8 rounded-lg border-0 bg-transparent"
+              : "h-10 w-10 rounded-xl border border-border/40 bg-background/80",
+          )}
           disabled={!query.trim()}
         >
           <HugeiconsIcon icon={Search01Icon} size={16} strokeWidth={2} />

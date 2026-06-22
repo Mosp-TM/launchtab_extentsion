@@ -1,7 +1,7 @@
 import TabsList from "./TabsList";
 
 const TabsZone = () => {
-  return <TabsList />;
+  return <TabsList variant="dock" />;
 };
 
 export default TabsZone;

@@ -17,7 +17,6 @@ import { useTabClickHistoryStore } from "@/store/tabClickHistoryStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { useTranslation } from "@/constants/languages";
 import { cn } from "@/lib/utils";
-import { Card } from "@/components/ui/card";
 import { AddTabDialog } from "./AddTabDialog";
 import { EditTabDialog } from "./EditTabDialog";
 import { ShortcutDialog } from "./ShortcutDialog";
@@ -76,6 +75,7 @@ interface SortableShortcutCardProps {
   removeTab: (id: string) => void;
   incrementVisitCount: (id: string) => void;
   autoOrderTabs: boolean;
+  compact?: boolean;
 }
 
 const SortableShortcutCard = ({
@@ -85,6 +85,7 @@ const SortableShortcutCard = ({
   removeTab,
   incrementVisitCount,
   autoOrderTabs,
+  compact = false,
 }: SortableShortcutCardProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const {
@@ -230,20 +231,22 @@ const SortableShortcutCard = ({
             </TooltipContent>
           </Tooltip>
 
-          <p
-            className="w-full text-center text-foreground leading-tight"
-            style={{
-              fontSize:
-                "max(0.5rem, calc(var(--card-size-dynamic, 4.5rem) * 0.17))",
-              fontWeight: 400,
-              letterSpacing: "0px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {tab.title || hostname}
-          </p>
+          {!compact && (
+            <p
+              className="w-full text-center text-foreground leading-tight"
+              style={{
+                fontSize:
+                  "max(0.5rem, calc(var(--card-size-dynamic, 4.5rem) * 0.17))",
+                fontWeight: 400,
+                letterSpacing: "0px",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {tab.title || hostname}
+            </p>
+          )}
         </div>
       </ContextMenuTrigger>
 
@@ -318,7 +321,11 @@ const SortableShortcutCard = ({
   );
 };
 
-export const TabsList = () => {
+export const TabsList = ({
+  variant = "dock",
+}: {
+  variant?: "grid" | "dock";
+}) => {
   const [mounted, setMounted] = useState(false);
   const tabs = useTabsStore((state) => state.tabs);
   const removeTab = useTabsStore((state) => state.removeTab);
@@ -326,9 +333,8 @@ export const TabsList = () => {
   const incrementVisitCount = useTabsStore(
     (state) => state.incrementVisitCount,
   );
-  const { autoOrderTabs, cardSize, cardRadius, language, tabsPosition } =
+  const { autoOrderTabs, cardSize, cardRadius, tabsPosition } =
     useSettingsStore();
-  const t = useTranslation(language);
 
   useEffect(() => {
     setMounted(true);
@@ -338,20 +344,12 @@ export const TabsList = () => {
     return null;
   }
 
+  const isDock = variant === "dock";
+
   if (tabs.length === 0) {
     return (
-      <div className="flex h-full flex-col overflow-y-auto px-2 pb-4 md:px-4">
-        <div className="flex justify-end mb-6">
-          <AddTabDialog />
-        </div>
-
-        <div className="flex-1 flex items-center justify-center">
-          <Card className="flex h-36 items-center justify-center border-dashed border-border/60 bg-muted/30">
-            <p className="text-sm text-muted-foreground">
-              {t("startByAddingFirstShortcut")}
-            </p>
-          </Card>
-        </div>
+      <div className="flex w-full justify-center">
+        <AddTabDialog />
       </div>
     );
   }
@@ -359,6 +357,45 @@ export const TabsList = () => {
   const sortedTabs = autoOrderTabs
     ? [...tabs].sort((a, b) => b.visitCount - a.visitCount)
     : tabs;
+
+  if (isDock) {
+    return (
+      <TooltipProvider delayDuration={150}>
+        <DndProvider backend={HTML5Backend}>
+          <div
+            className="shortcut-card-grid flex w-full justify-center gap-3 overflow-x-auto px-1 py-1 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
+            style={
+              {
+                "--base-card-size": "3.25rem",
+                "--base-card-radius": "0.875rem",
+              } as React.CSSProperties
+            }
+          >
+            {sortedTabs.map((tab: Tab, index) => (
+              <div
+                key={tab.id}
+                className="shrink-0"
+                style={{ width: "var(--card-size-dynamic, 3.25rem)" }}
+              >
+                <SortableShortcutCard
+                  tab={tab}
+                  index={index}
+                  moveTab={moveTab}
+                  removeTab={removeTab}
+                  incrementVisitCount={incrementVisitCount}
+                  autoOrderTabs={autoOrderTabs}
+                  compact
+                />
+              </div>
+            ))}
+            <div className="flex shrink-0 items-center">
+              <AddTabDialog />
+            </div>
+          </div>
+        </DndProvider>
+      </TooltipProvider>
+    );
+  }
 
   return (
     <div className="flex h-full flex-col px-2 pb-4 md:px-4">
