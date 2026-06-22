@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "LaunchTab",
-  "version": "0.02.15",
+  "version": "1.0.0",
   "description": "AI-powered new tab dashboard with shortcuts, notes, and beautiful customization.",
   "chrome_url_overrides": {
     "newtab": "newtab.html"
